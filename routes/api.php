@@ -32,3 +32,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/document', [DocumentController::class, 'get']);
+Route::get('/timeframe', [DocumentController::class, 'timeframe']);
