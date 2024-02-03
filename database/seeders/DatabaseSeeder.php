@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(DocumentSeeder::class);
         $this->call(InputSeeder::class);
         $this->call(DocumentInputSeeder::class);
-
-
+        $this->call(StatusSeeder::class);
     }
 }
