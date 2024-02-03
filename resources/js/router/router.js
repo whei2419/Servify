@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import Login from "../pages/Login.vue";
 import Home from "../pages/Welcome.vue";
 import Appointment from "../pages/CreateAppointment.vue";
+import Register from "../pages/Register.vue";
 
 
 const routes = [
@@ -14,6 +15,11 @@ const routes = [
         path: '/login',
         component: Login,
         name: 'Login'
+    },
+    {
+        path: '/register',
+        component: Register,
+        name: 'Register'
     },
     {
         path: '/create',
