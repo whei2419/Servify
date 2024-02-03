@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('document_inputs', function (Blueprint $table) {
             $table->id();
-            $table->string('image');
             $table->unsignedBigInteger('document_id');
             $table->unsignedBigInteger('input_id');
             $table->timestamps();

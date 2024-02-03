@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Timeframe extends Model
 {
     use HasFactory;
+
+    public $table = 'timeframes';
+
+    protected $fillable = [
+        'start_time',
+        'end_time',
+    ];
+
 }
