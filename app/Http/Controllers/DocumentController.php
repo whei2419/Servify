@@ -10,7 +10,6 @@ class DocumentController extends Controller
     public function get(Request $request)
     {
         $document = Document::get();
-        return response()->json(['questions'=>$document], 200);
-
+        return response()->json(['documents'=>$document], 200);
     }
 }
