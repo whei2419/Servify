@@ -31,10 +31,5 @@ class InputSeeder extends Seeder
         Input::create(['name' => 'Commercial','type'=>'radio']);
         Input::create(['name' => 'Institutional','type'=>'radio']);
         Input::create(['name' => 'Government','type'=>'radio']);
-
-        
-
-
-
     }
 }
