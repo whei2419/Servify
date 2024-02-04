@@ -19,10 +19,10 @@
             v-for="(input, index) in formattedInputs.text"
             :key="index"
           >
-            <label class="mr-2" :for="input.input.name">{{
+            <label class="mr-2" :for="input.input.id">{{
               input.input.name
             }}</label>
-            <input class="input-text" :name="input.input.name" type="text" required />
+            <input class="input-text" :name="input.input.id" type="text" required />
           </div>
           <div v-if="formattedInputs.date && formattedInputs.date.length !== 0">
             <div
@@ -30,10 +30,10 @@
               v-for="(input, index) in formattedInputs.date"
               :key="index"
             >
-              <label class="mr-2" :for="input.input.name">{{
+              <label class="mr-2" :for="input.input.id">{{
                 input.input.name
               }}</label>
-              <input class="input-date" :name="input.input.name" type="date" required />
+              <input class="input-date" :name="input.input.id" type="date" required />
             </div>
           </div>
           <div
@@ -44,12 +44,12 @@
               v-for="(input, index) in formattedInputs.number"
               :key="index"
             >
-              <label class="mr-2" :for="input.input.name">{{
+              <label class="mr-2" :for="input.input.id">{{
                 input.input.name
               }}</label>
               <input
                 class="input-text"
-                :name="input.input.name"
+                :name="input.input.id"
                 type="number"
                 required
               />
@@ -67,7 +67,8 @@
               class="input-radio"
               type="radio"
               :name="input.input.type"
-              :value="input.input.name"
+              :value="input.input.id"
+              v-model="selectedValue"
               required
             />
             <label class="ml-2">{{ input.input.name }}</label>
@@ -102,7 +103,8 @@ export default {
   data() {
     return {
       date: null,
-      formData:[]
+      formData:{},
+      selectedValue:null
     };
   },
   computed: {
@@ -112,13 +114,18 @@ export default {
   },
   methods:{
     handleSubmit(values){
+        const processData = {};
         const inputs = values.target;
-        console.log(values);
         for(const item of inputs){
-            console.log(item.name);
+          if(item.type != 'radio' && item.type != 'submit' ){
+            processData[item.name] = item.value;
+          }
+        }
+        if(!this.selectedValue){
+          processData[this.selectedValue] = true;
         }
 
-
+        console.log(processData);
     },
   },
   created() {
