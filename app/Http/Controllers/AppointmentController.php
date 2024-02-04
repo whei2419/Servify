@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Appointment;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Writer;
+use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Mime\Part\DataPart;
 
 class AppointmentController extends Controller
 {
@@ -29,6 +33,21 @@ class AppointmentController extends Controller
         // Update the appointment with the generated code
         $appointment->code = $appointmentCode;
         $appointment->save();
+
+        $renderer = new ImageRenderer(
+            new \BaconQrCode\Renderer\RendererStyle\RendererStyle(400),
+            new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
+        );
+    
+        $writer = new Writer($renderer);
+        $qrCode = $writer->writeString($appointment->code);
+    
+        
+        Mail::send([], [], function ($message) use ($qrCode,$request) {
+            $message->to($request->email)
+                ->subject('QR Code')
+                ->attachData($qrCode, 'qrcode.svg');
+        });
 
         return response()->json([
             'status' => true,
