@@ -26,10 +26,10 @@
 
         <div class="date-time mb-5">
           <div class="form-control">
-            <input v-model="time" class="time-picker" type="time" />
+            <input v-model="date" class="date-picker" type="date" />
           </div>
           <div class="form-control">
-            <input v-model="date" class="date-picker" type="date" />
+            <input v-model="time" class="time-picker" type="time" />
           </div>
         </div>
         <div class="mt-2 mb-8">
