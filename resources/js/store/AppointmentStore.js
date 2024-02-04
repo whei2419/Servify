@@ -28,8 +28,6 @@ export const useAppointmentStore = defineStore('appointmentStore',{
                     groupedInputs[inputType].push(input);
                 }
             });
-            console.log(groupedInputs);
-
             return groupedInputs;
         }
     },

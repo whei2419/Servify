@@ -1,14 +1,18 @@
 <template>
   <v-container class="w-100 main-container">
-    <h1 class="text-h6 text-md-h5 text-lg-h4 text-center text-bold mb-2 mt-11">
-      Appointment details
-    </h1>
+
+
     <v-card
       class="mx-auto pa-9 mt-4 overflow-y-auto"
       elevation="2"
       max-width="800"
     >
-      <v-form @submit.prevent>
+    <h1 class="text-h4 text-md-h5 text-lg-h4 text-center text-bold mb-2">
+      Appointment details
+    </h1>
+    <p class="mb-6">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo</p>
+    <v-divider></v-divider>
+      <v-form v-modal="formData" @submit.prevent="handleSubmit">
         <div class="section my-6">
           <div
             class="form-control"
@@ -18,7 +22,7 @@
             <label class="mr-2" :for="input.input.name">{{
               input.input.name
             }}</label>
-            <input class="input-text" :name="input.input.name" type="text" />
+            <input class="input-text" :name="input.input.name" type="text" required />
           </div>
           <div v-if="formattedInputs.date && formattedInputs.date.length !== 0">
             <div
@@ -29,7 +33,7 @@
               <label class="mr-2" :for="input.input.name">{{
                 input.input.name
               }}</label>
-              <input class="input-date" :name="input.input.name" type="date" />
+              <input class="input-date" :name="input.input.name" type="date" required />
             </div>
           </div>
           <div
@@ -47,6 +51,7 @@
                 class="input-text"
                 :name="input.input.name"
                 type="number"
+                required
               />
             </div>
           </div>
@@ -61,9 +66,9 @@
             <input
               class="input-radio"
               type="radio"
-              id="option2"
               :name="input.input.type"
               :value="input.input.name"
+              required
             />
             <label class="ml-2">{{ input.input.name }}</label>
           </div>
@@ -97,6 +102,7 @@ export default {
   data() {
     return {
       date: null,
+      formData:[]
     };
   },
   computed: {
@@ -104,6 +110,23 @@ export default {
       return this.date;
     },
   },
+  methods:{
+    handleSubmit(values){
+        const inputs = values.target;
+        console.log(values);
+        for(const item of inputs){
+            console.log(item.name);
+        }
+
+
+    },
+  },
+  created() {
+    const formInputs = useAppointmentStore().formatInputs;
+
+    console.log(formInputs);
+
+  }
 };
 </script>
 
