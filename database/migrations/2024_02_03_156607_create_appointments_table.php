@@ -13,22 +13,15 @@ return new class extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->unsignedBigInteger('timeframe_id');
+            $table->datetime('date');
             $table->string('email');
             $table->json('values');
             $table->unsignedBigInteger('status_id');
+            $table->string('code')->nullable();
+
             $table->timestamps();
 
-            $table->index(["timeframe_id"], 'appointment-timeframe');
             $table->index(["status_id"], 'appointment-status');
-
-
-            $table->foreign('timeframe_id', 'appointment-timeframe')
-            ->references('id')->on('timeframes')
-            ->onDelete('restrict')
-            ->onUpdate('restrict');
-            
             $table->foreign('status_id', 'appointment-status')
             ->references('id')->on('status')
             ->onDelete('restrict')
