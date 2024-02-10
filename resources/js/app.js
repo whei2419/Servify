@@ -1,7 +1,8 @@
 import { createApp } from 'vue';
 import Index from "./Index.vue";
 import router from './router/router';
-import { createPinia } from "pinia"; // Corrected spelling of 'import'
+import { createPinia } from "pinia";
+
 
 // Vuetify
 import 'vuetify/styles';

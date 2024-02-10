@@ -3,6 +3,8 @@ import Login from "../pages/Login.vue";
 import Home from "../pages/Welcome.vue";
 import Appointment from "../pages/CreateAppointment.vue";
 import Register from "../pages/Register.vue";
+import Scanner from "../pages/Scanner.vue";
+import Quelist from "../pages/Quelist.vue";
 
 
 const routes = [
@@ -25,6 +27,16 @@ const routes = [
         path: '/create',
         component: Appointment,
         name: 'Appointment'
+    },
+    {
+        path: '/scan',
+        component: Scanner,
+        name: 'Scanner'
+    },
+    {
+        path: '/queue',
+        component: Quelist,
+        name: 'Quelist'
     },
 ];
 
