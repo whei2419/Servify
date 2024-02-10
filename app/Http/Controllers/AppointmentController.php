@@ -8,7 +8,10 @@ use App\Models\Appointment;
 use App\Models\Queue;
 
 use App\Events\QueueEvent;
-
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Writer;
+use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Mime\Part\DataPart;
 class AppointmentController extends Controller
 {
     public function add(Request $request)
@@ -41,7 +44,6 @@ class AppointmentController extends Controller
         $writer = new Writer($renderer);
         $qrCode = $writer->writeString($appointment->code);
     
-        
         Mail::send([], [], function ($message) use ($qrCode,$request) {
             $message->to($request->email)
                 ->subject('QR Code')
@@ -88,7 +90,6 @@ class AppointmentController extends Controller
         ]);
 
         $appointment = Appointment::where('code',$request->code)->first();
-
 
         $event = Queue::where('appointment_id',$appointment->id)->exists();
 
