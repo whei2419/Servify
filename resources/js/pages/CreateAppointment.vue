@@ -23,13 +23,14 @@
             v-for="(input, index) in formattedInputs.text"
             :key="index"
           >
-            <label class="mr-2" :for="input.input.id">{{
+            <label class="mr-2" :for="input.input.name">{{
               input.input.name
             }}</label>
             <input
               class="input-text"
-              :name="input.input.id"
+              :name="input.input.name"
               type="text"
+              :data-id="input.input.id"
               required
             />
           </div>
@@ -89,6 +90,7 @@
           </div>
         </div>
         <v-btn
+        :loading="loading"
           type="submit"
           block
           color="indigo-darken-3"
@@ -103,6 +105,7 @@
       v-else
       class="mx-auto pa-9 mt-4 overflow-y-auto congratulation-card"
       elevation="2"
+      max-width="800"
     >
       <div class="icon text-center">
         <i class="fa-solid fa-circle-check text-green-lighten-1"></i>
@@ -117,16 +120,17 @@
       </p>
       <p class="schedule">
         <i class="fa-regular fa-calendar-days"></i> Date :
-        <span>some text</span>
+        <span>{{ formattedDate }}</span>
       </p>
       <p class="schedule">
-        <i class="fa-regular fa-clock"></i> Time : <span>some text</span>
+        <i class="fa-regular fa-clock"></i> Time : <span>{{ formattedTime }}</span>
       </p>
     </v-card>
   </v-container>
 </template>
 
 <script>
+import moment from 'moment';
 import axios from "axios";
 import config from "../utils.js";
 import { useAppointmentStore } from "../store/AppointmentStore";
@@ -146,15 +150,24 @@ export default {
       formData: {},
       selectedValue: null,
       isComplete: true,
+      resDate:null,
+      loading:false
     };
   },
   computed: {
     formatedDate() {
       return this.date;
     },
+    formattedDate() {
+      return moment(this.resDate).format('YYYY-MM-DD');
+    },
+    formattedTime() {
+        return moment(this.resDate).format('h:mm:ss A');
+    }
   },
   methods: {
     handleSubmit(values) {
+        this.loading = true;
       const userDetails = useAppointmentStore().appointmentData;
       const date = `${userDetails.appointmentDate} ${userDetails.appointmentTime}`;
       const processData = [];
@@ -163,23 +176,28 @@ export default {
       for (const item of inputs) {
         if (item.type != "radio" && item.type != "submit") {
           processData.push({
-            id: item.name,
+            id: item.dataset.id,
             value: item.value,
             type: item.type,
+            name:item.name
           });
         }
       }
+
+      console.log(processData)
       axios({
         method: "post",
         url: `${config.baseUrl}/appointment`,
         data: {
           date: date,
           email: userDetails.appointmentEmail,
-          values: processData,
+          values: JSON.stringify(processData),
         },
       })
         .then((res) => {
+        this.resDate = res.data.date;
          this.isComplete = false;
+         this.loading = false;
         })
         .catch((error) => {
           console.error("Error occurred:", error);
@@ -188,8 +206,6 @@ export default {
   },
   created() {
     const formInputs = useAppointmentStore().formatInputs;
-
-    console.log(formInputs);
   },
 };
 </script>
