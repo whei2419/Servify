@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Appointment;
-use BaconQrCode\Renderer\ImageRenderer;
-use BaconQrCode\Writer;
-use Illuminate\Support\Facades\Mail;
-use Symfony\Component\Mime\Part\DataPart;
+use App\Models\Queue;
+
+use App\Events\QueueEvent;
 
 class AppointmentController extends Controller
 {
@@ -55,6 +54,7 @@ class AppointmentController extends Controller
         ], 200);
     }
 
+
     public function checkTimeframe(Request $request)
     {
         $request->validate([
@@ -79,7 +79,36 @@ class AppointmentController extends Controller
             'available_slots' => 10 - $appointmentsCount,
             'is_available' => $isAvailable
         ]);
-        
+    }
 
+    public function addQueue(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string', // Assuming datetime is in format YYYY-MM-DD HH:MM:SS
+        ]);
+
+        $appointment = Appointment::where('code',$request->code)->first();
+
+
+        $event = Queue::where('appointment_id',$appointment->id)->exists();
+
+        if($event == 1){
+            return response()->json([
+                'status' => 'Already in queue',
+            ]);
+        }
+        
+        $queue = new Queue;
+        $queue->appointment_id = $appointment->id;
+        $queue->save();
+
+        $appointment->status_id = 2;
+        $appointment->save();
+
+        event(new QueueEvent($appointment));
+
+        return response()->json([
+            'status' => 'Success',
+        ]);
     }
 }

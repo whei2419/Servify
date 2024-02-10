@@ -30,9 +30,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::group(['prefix' => 'appointment'], function () {
-        Route::post('/create', [AppointmentController::class, 'add']);
-        Route::post('/checkTimeframe', [AppointmentController::class, 'checkTimeframe']);
-
+        Route::post('/addQueue', [AppointmentController::class, 'addQueue']);
     });
 
 });
