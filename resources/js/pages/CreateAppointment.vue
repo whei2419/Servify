@@ -1,17 +1,21 @@
 <template>
   <v-container class="w-100 main-container">
-
-
     <v-card
       class="mx-auto pa-9 mt-4 overflow-y-auto"
       elevation="2"
       max-width="800"
+      v-if="isComplete"
     >
-    <h1 class="text-h4 text-md-h5 text-lg-h4 text-center text-bold mb-2">
-      Appointment details
-    </h1>
-    <p class="mb-6">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo</p>
-    <v-divider></v-divider>
+      <h1 class="text-h4 text-md-h5 text-lg-h4 text-center text-bold mb-2">
+        Appointment details
+      </h1>
+      <p class="mb-6 text-center">
+        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+        accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
+        illo inventore veritatis et quasi architecto beatae vitae dicta sunt
+        explicabo
+      </p>
+      <v-divider></v-divider>
       <v-form v-modal="formData" @submit.prevent="handleSubmit">
         <div class="section my-6">
           <div
@@ -22,7 +26,12 @@
             <label class="mr-2" :for="input.input.id">{{
               input.input.name
             }}</label>
-            <input class="input-text" :name="input.input.id" type="text" required />
+            <input
+              class="input-text"
+              :name="input.input.id"
+              type="text"
+              required
+            />
           </div>
           <div v-if="formattedInputs.date && formattedInputs.date.length !== 0">
             <div
@@ -33,7 +42,12 @@
               <label class="mr-2" :for="input.input.id">{{
                 input.input.name
               }}</label>
-              <input class="input-date" :name="input.input.id" type="date" required />
+              <input
+                class="input-date"
+                :name="input.input.id"
+                type="date"
+                required
+              />
             </div>
           </div>
           <div
@@ -85,10 +99,36 @@
         >
       </v-form>
     </v-card>
+    <v-card
+      v-else
+      class="mx-auto pa-9 mt-4 overflow-y-auto congratulation-card"
+      elevation="2"
+    >
+      <div class="icon text-center">
+        <i class="fa-solid fa-circle-check text-green-lighten-1"></i>
+      </div>
+
+      <h1 class="text-h4 text-md-h5 text-lg-h4 text-center text-bold mb-2">
+        Appointment Created!
+      </h1>
+      <p class="mb-6">
+        Weve sent you an email of your qr please present it to our counter at
+        your scheduled date
+      </p>
+      <p class="schedule">
+        <i class="fa-regular fa-calendar-days"></i> Date :
+        <span>some text</span>
+      </p>
+      <p class="schedule">
+        <i class="fa-regular fa-clock"></i> Time : <span>some text</span>
+      </p>
+    </v-card>
   </v-container>
 </template>
 
 <script>
+import axios from "axios";
+import config from "../utils.js";
 import { useAppointmentStore } from "../store/AppointmentStore";
 export default {
   setup() {
@@ -103,8 +143,9 @@ export default {
   data() {
     return {
       date: null,
-      formData:{},
-      selectedValue:null
+      formData: {},
+      selectedValue: null,
+      isComplete: true,
     };
   },
   computed: {
@@ -112,28 +153,44 @@ export default {
       return this.date;
     },
   },
-  methods:{
-    handleSubmit(values){
-        const processData = {};
-        const inputs = values.target;
-        for(const item of inputs){
-          if(item.type != 'radio' && item.type != 'submit' ){
-            processData[item.name] = item.value;
-          }
-        }
-        if(!this.selectedValue){
-          processData[this.selectedValue] = true;
-        }
+  methods: {
+    handleSubmit(values) {
+      const userDetails = useAppointmentStore().appointmentData;
+      const date = `${userDetails.appointmentDate} ${userDetails.appointmentTime}`;
+      const processData = [];
+      const inputs = values.target;
 
-        console.log(processData);
+      for (const item of inputs) {
+        if (item.type != "radio" && item.type != "submit") {
+          processData.push({
+            id: item.name,
+            value: item.value,
+            type: item.type,
+          });
+        }
+      }
+      axios({
+        method: "post",
+        url: `${config.baseUrl}/appointment`,
+        data: {
+          date: date,
+          email: userDetails.appointmentEmail,
+          values: processData,
+        },
+      })
+        .then((res) => {
+         this.isComplete = false;
+        })
+        .catch((error) => {
+          console.error("Error occurred:", error);
+        });
     },
   },
   created() {
     const formInputs = useAppointmentStore().formatInputs;
 
     console.log(formInputs);
-
-  }
+  },
 };
 </script>
 
@@ -143,12 +200,15 @@ export default {
   grid-template-columns: repeat(2, 1fr); /* Two columns with equal width */
   gap: 20px; /* Gap between grid items */
 }
-.section-radio{
-    display: flex;
-    gap: 20px;
+.section-radio {
+  display: flex;
+  gap: 20px;
 }
 
 .form-control {
+  label {
+    font-size: $font-sm;
+  }
   .input-text,
   .input-date {
     padding: 5px 20px;
@@ -160,11 +220,33 @@ export default {
     height: 50px;
     width: 100%;
     background: #2a2a2a;
+
     &:focus {
       background: rgb(133, 133, 133);
       outline: none;
       border-bottom: 2px solid #ffffff;
       transition: all 0.5 ease-in-out;
+    }
+  }
+}
+.congratulation-card {
+  .schedule {
+    font-size: 1rem;
+    margin: 10px;
+    color: #66bb6a;
+
+    span {
+      color: white;
+    }
+  }
+  p {
+    font-size: $font-sm;
+    text-align: center;
+  }
+  .icon {
+    margin-bottom: 1.5rem;
+    i {
+      font-size: 4rem;
     }
   }
 }
