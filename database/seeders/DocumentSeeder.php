@@ -20,7 +20,5 @@ class DocumentSeeder extends Seeder
         Document::create(['name'=>'Tricycle Permit']);
         Document::create(['name'=>'Barangay Clearance (Wiring Building)']);
         Document::create(['name'=>'Barangay Clearance (Working)']);
-
-
     }
 }

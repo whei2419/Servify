@@ -24,30 +24,4 @@ class DocumentController extends Controller
         return response()->json(['Timeframe'=>$timeframe], 200);
     }
 
-    public function qr(Request $request)
-    {
-        $renderer = new ImageRenderer(
-            new \BaconQrCode\Renderer\RendererStyle\RendererStyle(400),
-            new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
-        );
-    
-        $writer = new Writer($renderer);
-        $qrCode = $writer->writeString('Your QR Code Data');
-    
-        
-        Mail::send([], [], function ($message) use ($qrCode) {
-            $message->to('johncarlocasipit@gmail.com')
-                ->subject('QR Code')
-                ->attachData($qrCode, 'qrcode.svg');
-        });
-
-        return "QR Code sent via email.";
-
-    }
-
-
-
-
-
-
 }
