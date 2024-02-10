@@ -5,6 +5,7 @@ import Appointment from "../pages/CreateAppointment.vue";
 import Register from "../pages/Register.vue";
 import Scanner from "../pages/Scanner.vue";
 import Quelist from "../pages/Quelist.vue";
+import Details from "../pages/AppointmentDetails.vue"
 
 
 const routes = [
@@ -37,6 +38,11 @@ const routes = [
         path: '/queue',
         component: Quelist,
         name: 'Quelist'
+    },
+    {
+        path: '/details',
+        component: Details,
+        name: 'Details'
     },
 ];
 

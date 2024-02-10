@@ -4,7 +4,6 @@
       class="mx-auto pa-9 mt-4 overflow-y-auto"
       elevation="2"
       max-width="800"
-      v-if="isComplete"
     >
       <h1 class="text-h4 text-md-h5 text-lg-h4 text-center text-bold mb-2">
         Appointment details
@@ -90,7 +89,7 @@
           </div>
         </div>
         <v-btn
-        :loading="loading"
+          :loading="loading"
           type="submit"
           block
           color="indigo-darken-3"
@@ -101,36 +100,10 @@
         >
       </v-form>
     </v-card>
-    <v-card
-      v-else
-      class="mx-auto pa-9 mt-4 overflow-y-auto congratulation-card"
-      elevation="2"
-      max-width="800"
-    >
-      <div class="icon text-center">
-        <i class="fa-solid fa-circle-check text-green-lighten-1"></i>
-      </div>
-
-      <h1 class="text-h4 text-md-h5 text-lg-h4 text-center text-bold mb-2">
-        Appointment Created!
-      </h1>
-      <p class="mb-6">
-        Weve sent you an email of your qr please present it to our counter at
-        your scheduled date
-      </p>
-      <p class="schedule">
-        <i class="fa-regular fa-calendar-days"></i> Date :
-        <span>{{ formattedDate }}</span>
-      </p>
-      <p class="schedule">
-        <i class="fa-regular fa-clock"></i> Time : <span>{{ formattedTime }}</span>
-      </p>
-    </v-card>
   </v-container>
 </template>
 
 <script>
-import moment from 'moment';
 import axios from "axios";
 import config from "../utils.js";
 import { useAppointmentStore } from "../store/AppointmentStore";
@@ -143,31 +116,24 @@ export default {
       formattedInputs: appointmentData.formatInputs,
     };
   },
-
   data() {
     return {
       date: null,
       formData: {},
       selectedValue: null,
       isComplete: true,
-      resDate:null,
-      loading:false
+      resDate: null,
+      loading: false,
     };
   },
   computed: {
     formatedDate() {
       return this.date;
     },
-    formattedDate() {
-      return moment(this.resDate).format('YYYY-MM-DD');
-    },
-    formattedTime() {
-        return moment(this.resDate).format('h:mm:ss A');
-    }
   },
   methods: {
     handleSubmit(values) {
-        this.loading = true;
+      this.loading = true;
       const userDetails = useAppointmentStore().appointmentData;
       const date = `${userDetails.appointmentDate} ${userDetails.appointmentTime}`;
       const processData = [];
@@ -179,12 +145,10 @@ export default {
             id: item.dataset.id,
             value: item.value,
             type: item.type,
-            name:item.name
+            name: item.name,
           });
         }
       }
-
-      console.log(processData)
       axios({
         method: "post",
         url: `${config.baseUrl}/appointment`,
@@ -195,9 +159,9 @@ export default {
         },
       })
         .then((res) => {
-        this.resDate = res.data.date;
-         this.isComplete = false;
-         this.loading = false;
+          useAppointmentStore().saveDetails(res.data.appointment);
+          this.$router.push({ name: "Details",});
+          this.loading = false;
         })
         .catch((error) => {
           console.error("Error occurred:", error);
@@ -211,6 +175,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.qr-cntainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+
+  canvas {
+    padding: 1rem;
+    background: #fff;
+  }
+}
 .section {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Two columns with equal width */

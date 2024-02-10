@@ -10,14 +10,23 @@
             {{ item }}
           </v-tab>
         </v-tabs>
+        <div v-if="message" class="message">
+            <p class="pa-1 my-3 rounded-sm bg-warning "><small><i class="fa-solid fa-circle-info pr-2"></i> {{ message }}</small></p>
+        </div>
         <v-window v-model="tab">
           <v-window-item v-for="item in items" :key="item" :value="item">
             <v-card flat class="pa-5">
-              <qrcode-stream
-                v-if="item === 'Scan'"
-                @decode="onDecode"
-                :locate="true"
-              ></qrcode-stream>
+              <div v-if="item === 'Scan'" class="scanner-container">
+                <v-btn v-if="isScan === false" color="indigo-darken-3" size="large" @click="isScan = true">
+                  <i class="fa-solid fa-qrcode"></i>
+                  <span class="ml-1">Scan</span>
+                </v-btn>
+                <qrcode-stream
+                    v-if="isScan"
+                  @decode="onDecode"
+                  :locate="true"
+                ></qrcode-stream>
+              </div>
               <div v-else>
                 <v-form @submit.prevent="handleSubmit">
                   <v-text-field
@@ -44,7 +53,9 @@
   </v-container>
 </template>
 
-  <script>
+<script>
+import axios from "axios";
+import config from "../utils.js";
 import {
   QrcodeStream,
   QrcodeDropZone,
@@ -59,6 +70,8 @@ export default {
   },
   data() {
     return {
+        message:'',
+        isScan:false,
       error: null,
       cameraNotDetected: false,
       tab: "Scan",
@@ -74,11 +87,34 @@ export default {
     };
   },
   methods: {
+    addQueue(value) {
+      var token = localStorage.getItem("token");
+      axios({
+        method: "post",
+        url: `${config.baseUrl}/appointment/addQueue`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          code: value,
+        },
+      })
+        .then((res) => {
+            this.message = `Alert : ${res.data.status}`;
+            setTimeout(() => {
+              this.message  = '';
+           }, 3000);
+            this.isScan = false;
+        })
+        .catch((error) => {
+          console.error("Error occurred:", error);
+        });
+    },
     handleSubmit() {
-      console.log("test");
+      this.addQueue(this.qrCode);
     },
     onDecode(decodedString) {
-      console.log(decodedString);
+      this.addQueue(decodedString);
     },
     onError(error) {
       console.error("Error while scanning QR code:", error);
@@ -113,12 +149,17 @@ export default {
 };
 </script>
 
-  <style>
+<style>
 .error {
   color: red;
 }
-
 .scanned-data {
   margin-top: 20px;
+}
+.scanner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
 }
 </style>
