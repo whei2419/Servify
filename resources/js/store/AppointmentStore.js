@@ -1,42 +1,49 @@
-import {defineStore} from "pinia"
+import { defineStore } from "pinia";
 
-export const useAppointmentStore = defineStore('appointmentStore',{
+export const useAppointmentStore = defineStore("appointmentStore", {
     state: () => ({
-        appointmentData:{
-            appointmentTime:null,
-            appointmentDate:null,
-            appointmentEmail:null,
-            appointmentInputList:null
-        }
-
+        appointmentData: {
+            appointmentTime: null,
+            appointmentDate: null,
+            appointmentEmail: null,
+            appointmentInputList: null,
+        },
+        details: {},
     }),
-    getters:{
-        formatInputs(){
+    getters: {
+        formatInputs() {
             const inputList = this.appointmentData.appointmentInputList;
             if (!inputList || !Array.isArray(inputList)) {
                 return {};
             }
 
             const groupedInputs = {};
-            inputList.forEach(input => {
+            inputList.forEach((input) => {
                 const inputType = input.input.type;
                 const inputName = input.input.name;
                 if (!groupedInputs[inputType]) {
                     groupedInputs[inputType] = [];
                 }
-                if(inputName !== 'Date'){
+                if (inputName !== "Date") {
                     groupedInputs[inputType].push(input);
                 }
             });
             return groupedInputs;
-        }
+        },
     },
     actions: {
-        saveData(data){
+        saveData(data) {
             this.appointmentData = data;
         },
-    getData(){
-        return this.appointmentData;
-    }
+        saveDetails(data) {
+            console.log(data);
+            this.details = data;
+        },
+        getData() {
+            return this.appointmentData;
+        },
+        getDetails() {
+            return this.details;
+        },
     },
-})
+});
