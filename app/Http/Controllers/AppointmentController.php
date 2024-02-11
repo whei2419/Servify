@@ -12,6 +12,8 @@ use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Writer;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\Mime\Part\DataPart;
+use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\TemplateProcessor;
 class AppointmentController extends Controller
 {
     public function add(Request $request)
@@ -106,10 +108,60 @@ class AppointmentController extends Controller
         $appointment->status_id = 2;
         $appointment->save();
 
-        event(new QueueEvent($appointment));
+        $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
+            ->where('appointments.status_id',2)->get()->map(function ($item) {
+                return $item->toArray();
+            });
+            
+        //return $queueList;
+
+        event(new QueueEvent($queueList));
 
         return response()->json([
             'status' => 'Success',
         ]);
+    }
+
+    public function queueList(Request $request)
+    {
+      
+        $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
+            ->where('appointments.status_id',2)->get();
+            
+
+        return response()->json([
+            'appointment' => $queueList,
+        ]);
+    }
+
+
+
+    public function generateClearanceDocument($name, $age)
+    {
+            // Load the Word template file
+            $templateFile = public_path('templates/BRGY-CLEARANCE-2019.docx');
+            $templateProcessor = new TemplateProcessor($templateFile);
+
+            // Replace placeholders with dynamic data
+            $templateProcessor->setValue('name', $name);
+            $templateProcessor->setValue('age', $age);
+            $templateProcessor->setValue('date', '2020-12-12');
+
+
+            // Save the modified document
+            $outputFile = public_path('generated/barangay_clearance_'.$name.'.docx');
+            $templateProcessor->saveAs($outputFile);
+
+            // Download the generated Word file
+            return response()->download($outputFile);
+
+    }
+
+    public function generateClearance(Request $request)
+    {
+        $name = $request->name;
+        $age = $request->age;
+
+        return $this->generateClearanceDocument($name, $age);
     }
 }

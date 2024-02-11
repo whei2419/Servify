@@ -16,6 +16,8 @@ class DocumentInputSeeder extends Seeder
         DocumentInput::create(['document_id'=>1,'input_id'=>1]);
         DocumentInput::create(['document_id'=>1,'input_id'=>2]);
         DocumentInput::create(['document_id'=>1,'input_id'=>3]);
+        DocumentInput::create(['document_id'=>1,'input_id'=>8]);
+
 
         DocumentInput::create(['document_id'=>2,'input_id'=>1]);
         DocumentInput::create(['document_id'=>2,'input_id'=>5]);

@@ -34,6 +34,6 @@ class QueueEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('pusher-channel');
+        return new Channel('queue');
     }
 }
