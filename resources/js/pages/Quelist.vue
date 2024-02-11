@@ -37,10 +37,29 @@
 </template>
 
 <script>
+import Pusher from "pusher-js";
+import config from '../utils.js';
+
+const pusher = new Pusher(config.pusherKey, {
+    cluster: config.pusherCluster,
+});
+
+const channel = pusher.subscribe('queue');
+
+channel.bind("App\\Events\\QueueEvent", (data) => {
+    console.log(data);
+});
+
+
 export default {
   data() {
-    return {};
+    return {
+        list:null
+    };
   },
+  created(){
+
+  }
 };
 </script>
 
