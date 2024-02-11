@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Queue extends Model
 {
     use HasFactory;
+
+    public function appointment()
+    {
+        return $this->belongsTo(Appointment::class);
+    }
 }

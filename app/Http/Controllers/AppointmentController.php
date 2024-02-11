@@ -108,12 +108,33 @@ class AppointmentController extends Controller
         $appointment->status_id = 2;
         $appointment->save();
 
-        event(new QueueEvent($appointment));
+        $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
+            ->where('appointments.status_id',2)->get()->map(function ($item) {
+                return $item->toArray();
+            });
+            
+        //return $queueList;
+
+        event(new QueueEvent($queueList));
 
         return response()->json([
             'status' => 'Success',
         ]);
     }
+
+    public function queueList(Request $request)
+    {
+      
+        $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
+            ->where('appointments.status_id',2)->get();
+            
+
+        return response()->json([
+            'appointment' => $queueList,
+        ]);
+    }
+
+
 
     public function generateClearanceDocument($name, $age)
     {

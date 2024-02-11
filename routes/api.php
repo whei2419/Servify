@@ -32,7 +32,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::group(['prefix' => 'appointment'], function () {
         Route::post('/addQueue', [AppointmentController::class, 'addQueue']);
         Route::post('/generate', [AppointmentController::class, 'generateClearance']);
-
+        Route::get('/queueList', [AppointmentController::class, 'queueList']);
     });
 
 });
