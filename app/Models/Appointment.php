@@ -27,4 +27,9 @@ class Appointment extends Model
     {
         return $this->belongsTo(Status::class);
     }
+
+    public function queue()
+    {
+        return $this->hasMany(Queue::class);
+    }
 }
