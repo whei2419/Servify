@@ -33,6 +33,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/addQueue', [AppointmentController::class, 'addQueue']);
         Route::post('/generate', [AppointmentController::class, 'generateClearance']);
         Route::get('/queueList', [AppointmentController::class, 'queueList']);
+        Route::post('/process', [AppointmentController::class, 'process']);
+        Route::get('/appointmentList', [AppointmentController::class, 'appointmentList']);
     });
 
 });

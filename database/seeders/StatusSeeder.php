@@ -15,7 +15,7 @@ class StatusSeeder extends Seeder
     {
         Status::create(['name' => 'reserve']);
         Status::create(['name' => 'queue']);
+        Status::create(['name' => 'processing']);
         Status::create(['name' => 'released']);
-
     }
 }
