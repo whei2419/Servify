@@ -109,7 +109,9 @@ class AppointmentController extends Controller
         $appointment->save();
 
         $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
-            ->where('appointments.status_id',2)->get()->map(function ($item) {
+            ->where('appointments.status_id',2)
+            ->orWhere('appointments.status_id',3)
+            ->get()->map(function ($item) {
                 return $item->toArray();
             });
             
@@ -126,7 +128,8 @@ class AppointmentController extends Controller
     {
       
         $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
-            ->where('appointments.status_id',2)->get();
+            ->where('appointments.status_id',2)
+            ->orWhere('appointments.status_id',3)->get();
             
 
         return response()->json([
