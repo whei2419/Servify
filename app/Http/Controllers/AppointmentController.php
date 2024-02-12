@@ -163,14 +163,37 @@ class AppointmentController extends Controller
 
     public function appointmentList(Request $request)
     {
-        $appointment = Appointment::get();
+        if(!empty($request->code))
+        {
+        $appointment = Appointment::where('code',$request->code)->paginate($request->limit);
+        return $appointment;
+        }
+
+        $appointment = Appointment::paginate($request->limit);
         
-        return response()->json([
-            'appointment' => $appointment,
-        ]);
+        return $appointment;
     }
 
+    public function editAppointment(Request $request)
+    {
+        $validate = Validator::make($request->all(), 
+        [
+            'date' => 'required',
+            'email' => 'required|email',
+            'values' => 'required',
+            'appointment_id' => 'required',
+        ]);
 
+        $appointment = Appointment::find($request->appointment_id);
+        $appointment->date = $request->date;
+        $appointment->email = $request->email;
+        $appointment->values = $request->values;
+        $appointment->save();
+
+        return response()->json([
+            'status' => 'Success',
+        ]);
+    }
 
     public function generateClearanceDocument($name, $age)
     {
