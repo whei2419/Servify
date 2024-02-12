@@ -111,6 +111,7 @@ class AppointmentController extends Controller
         $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
             ->where('appointments.status_id',2)
             ->orWhere('appointments.status_id',3)
+            ->orderBy('queues.id', 'asc')
             ->get()->map(function ($item) {
                 return $item->toArray();
             });
@@ -131,9 +132,41 @@ class AppointmentController extends Controller
             ->where('appointments.status_id',2)
             ->orWhere('appointments.status_id',3)->get();
             
-
         return response()->json([
             'appointment' => $queueList,
+        ]);
+    }
+
+    public function process(Request $request)
+    {
+        $queue = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
+            ->where('appointments.status_id',2)->orderBy('queues.id','asc')->first();
+
+        $appointment = Appointment::find($queue->appointment_id);
+        $appointment->status_id = 3;
+        $appointment->save();
+        
+        $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
+        ->where('appointments.status_id',2)
+        ->orWhere('appointments.status_id',3)
+        ->orderBy('queues.id', 'asc')
+        ->get()->map(function ($item) {
+            return $item->toArray();
+        });
+
+        event(new QueueEvent($queueList));
+
+        return response()->json([
+            'status' => 'Success',
+        ]);
+    }
+
+    public function appointmentList(Request $request)
+    {
+        $appointment = Appointment::get();
+        
+        return response()->json([
+            'appointment' => $appointment,
         ]);
     }
 
