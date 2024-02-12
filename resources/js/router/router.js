@@ -5,7 +5,8 @@ import Appointment from "../pages/CreateAppointment.vue";
 import Register from "../pages/Register.vue";
 import Scanner from "../pages/Scanner.vue";
 import Quelist from "../pages/Quelist.vue";
-import Details from "../pages/AppointmentDetails.vue"
+import Details from "../pages/AppointmentDetails.vue";
+import Dashboard from "../pages/Dashboard.vue"
 
 
 const routes = [
@@ -23,6 +24,11 @@ const routes = [
         path: '/register',
         component: Register,
         name: 'Register'
+    },
+    {
+        path: '/dashboard',
+        component: Dashboard,
+        name: 'Dashboard'
     },
     {
         path: '/create',

@@ -10,6 +10,7 @@
           src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
         ></v-img>
         <h1 class="text-center mb-4">Sign in your Account</h1>
+        <p v-if="message">{{ message }}</p>
         <v-form @submit.prevent="handleSubmit">
           <v-text-field
             v-model="formData.email"
@@ -43,6 +44,7 @@
   export default {
     data() {
       return {
+        message:null,
         formData: {
           fullName: "",
           email: "",
@@ -74,10 +76,11 @@
               .then((res) => {
                   console.log(res)
                   localStorage.setItem('token', res.data.token);
-                  this.$router.push({ name: "Scanner",});
+                  this.$router.push({ name: "Dashboard",});
               })
               .catch((error) => {
                   console.error('Error occurred:', error);
+                  this.message = error.message;
               });
       },
     },
