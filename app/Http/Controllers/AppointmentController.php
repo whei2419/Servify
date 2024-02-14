@@ -23,12 +23,15 @@ class AppointmentController extends Controller
             'date' => 'required',
             'email' => 'required|email',
             'values' => 'required',
+            'document_id' => 'required',
+
         ]);
 
         $appointment = new Appointment;
         $appointment->date = $request->date;
         $appointment->email = $request->email;
         $appointment->values = $request->values;
+        $appointment->document_id = $request->document_id;
         $appointment->status_id = 1;
         $appointment->save();
 
@@ -92,6 +95,13 @@ class AppointmentController extends Controller
         ]);
 
         $appointment = Appointment::where('code',$request->code)->first();
+        
+        if(empty($appointment))
+        {
+            return response()->json([
+                'status' => 'No Appointment in queue',
+            ]);
+        }
 
         $event = Queue::where('appointment_id',$appointment->id)->exists();
 
@@ -141,6 +151,13 @@ class AppointmentController extends Controller
     {
         $queue = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
             ->where('appointments.status_id',2)->orderBy('queues.id','asc')->first();
+      
+        if(empty($queue))
+        {
+            return response()->json([
+                'status' => 'No appointment in queue',
+            ]);
+        }
 
         $appointment = Appointment::find($queue->appointment_id);
         $appointment->status_id = 3;
@@ -159,6 +176,15 @@ class AppointmentController extends Controller
         return response()->json([
             'status' => 'Success',
         ]);
+    }
+    public function download(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string', // Assuming datetime is in format YYYY-MM-DD HH:MM:SS
+        ]);
+
+        $appointment = Appointment::where('code',$request->code)->first();
+        // if($appointment->)
     }
 
     public function appointmentList(Request $request)
@@ -195,7 +221,7 @@ class AppointmentController extends Controller
         ]);
     }
 
-    public function generateClearanceDocument($name, $age)
+    public function generateBrgyClearance($name, $age)
     {
             // Load the Word template file
             $templateFile = public_path('templates/BRGY-CLEARANCE-2019.docx');
@@ -213,7 +239,6 @@ class AppointmentController extends Controller
 
             // Download the generated Word file
             return response()->download($outputFile);
-
     }
 
     public function generateClearance(Request $request)

@@ -10,7 +10,7 @@ class Appointment extends Model
     use HasFactory;
 
     public $table = 'appointments';
-    protected $appends = ['status'];
+    protected $appends = ['status','document'];
 
     protected $fillable = [
         'date',
@@ -23,13 +23,25 @@ class Appointment extends Model
         return $this->status()->first();
     }
 
+    public function getDocumentAttribute()
+    {
+        return $this->document()->first();
+    }
+
     public function status()
     {
         return $this->belongsTo(Status::class);
+    }
+
+    public function document()
+    {
+        return $this->belongsTo(Document::class);
     }
 
     public function queue()
     {
         return $this->hasMany(Queue::class);
     }
+
+
 }
