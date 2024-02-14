@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use Symfony\Component\Mime\Part\DataPart;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Illuminate\Support\Facades\Storage;
 class AppointmentController extends Controller
 {
     public function add(Request $request)
@@ -184,7 +185,14 @@ class AppointmentController extends Controller
         ]);
 
         $appointment = Appointment::where('code',$request->code)->first();
-        // if($appointment->)
+        $values = json_decode($appointment->values);
+        if($appointment->document_id == 1)
+        {
+             //return $values;
+            // $name = $values[]
+            $data = $this->generateBrgyClearance($values[0]->value,$values[2]->value,$values[1]->value,$appointment->date);
+            return $data;
+        }
     }
 
     public function appointmentList(Request $request)
@@ -221,7 +229,7 @@ class AppointmentController extends Controller
         ]);
     }
 
-    public function generateBrgyClearance($name, $age)
+    public function generateBrgyClearance($name, $age, $purpose,$date)
     {
             // Load the Word template file
             $templateFile = public_path('templates/BRGY-CLEARANCE-2019.docx');
@@ -230,15 +238,16 @@ class AppointmentController extends Controller
             // Replace placeholders with dynamic data
             $templateProcessor->setValue('name', $name);
             $templateProcessor->setValue('age', $age);
-            $templateProcessor->setValue('date', '2020-12-12');
-
+            $templateProcessor->setValue('purpose', $purpose);
+            $templateProcessor->setValue('date', $date);
 
             // Save the modified document
-            $outputFile = public_path('generated/barangay_clearance_'.$name.'.docx');
+            $outputFile = storage_path('app/public/generated/barangay_clearance_'.$name.'.docx');
             $templateProcessor->saveAs($outputFile);
 
-            // Download the generated Word file
-            return response()->download($outputFile);
+            // Get the URL for the stored file
+            $downloadUrl = url('/generated/barangay_clearance_'.$name.'.docx');
+            return $downloadUrl;
     }
 
     public function generateClearance(Request $request)

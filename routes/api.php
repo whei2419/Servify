@@ -36,6 +36,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/process', [AppointmentController::class, 'process']);
         Route::post('/appointmentList', [AppointmentController::class, 'appointmentList']);
         Route::post('/editAppointment', [AppointmentController::class, 'editAppointment']);
+        Route::post('/download', [AppointmentController::class, 'download']);
+
 
     });
 
