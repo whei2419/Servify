@@ -5,6 +5,7 @@
       elevation="2"
       max-width="800"
     >
+    {{ appointmentData }}
       <h1 class="text-h4 text-md-h5 text-lg-h4 text-center text-bold mb-2">
         Appointment details
       </h1>
@@ -44,7 +45,8 @@
               }}</label>
               <input
                 class="input-date"
-                :name="input.input.id"
+                :name="input.input.name"
+                :data-id="input.input.id"
                 type="date"
                 required
               />
@@ -63,7 +65,8 @@
               }}</label>
               <input
                 class="input-text"
-                :name="input.input.id"
+                :name="input.input.name"
+                :data-id="input.input.id"
                 type="number"
                 required
               />
@@ -135,6 +138,7 @@ export default {
     handleSubmit(values) {
       this.loading = true;
       const userDetails = useAppointmentStore().appointmentData;
+      const documentId = userDetails.documentId;
       const date = `${userDetails.appointmentDate} ${userDetails.appointmentTime}`;
       const processData = [];
       const inputs = values.target;
@@ -149,13 +153,17 @@ export default {
           });
         }
       }
+
       axios({
         method: "post",
         url: `${config.baseUrl}/appointment`,
         data: {
+
           date: date,
           email: userDetails.appointmentEmail,
           values: JSON.stringify(processData),
+          documnet_id:documentId
+
         },
       })
         .then((res) => {

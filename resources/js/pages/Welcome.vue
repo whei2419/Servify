@@ -112,7 +112,11 @@ export default {
         appointmentDate: this.date,
         appointmentEmail: this.email,
         appointmentInputList: this.documentType.input,
+        documentId:this.documentType.id
       };
+
+
+      console.log( this.documentType.input);
 
       this.loading = true;
       const dateTime = `${this.date} ${time}`;
