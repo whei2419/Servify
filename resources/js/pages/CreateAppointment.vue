@@ -5,7 +5,6 @@
       elevation="2"
       max-width="800"
     >
-    {{ appointmentData }}
       <h1 class="text-h4 text-md-h5 text-lg-h4 text-center text-bold mb-2">
         Appointment details
       </h1>
@@ -158,12 +157,10 @@ export default {
         method: "post",
         url: `${config.baseUrl}/appointment`,
         data: {
-
           date: date,
           email: userDetails.appointmentEmail,
           values: JSON.stringify(processData),
-          documnet_id:documentId
-
+          document_id:documentId
         },
       })
         .then((res) => {

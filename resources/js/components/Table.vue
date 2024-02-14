@@ -139,6 +139,9 @@
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        data : {
+            limit:10,
+        }
       })
         .then((res) => {
           console.log(res);
@@ -147,6 +150,9 @@
           console.error("Error occurred:", error);
         });
     },
+      },
+      mounted() {
+        this.getList();
       }
     }
   </script>
