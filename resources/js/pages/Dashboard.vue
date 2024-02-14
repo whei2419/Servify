@@ -24,12 +24,17 @@
           </v-list-item>
           <v-divider></v-divider>
           <v-list density="compact" nav>
-            <v-list-item @click="selectedItem = 'queue'"  title="Queue" value="queue">
+            <v-list-item @click="selectedItem = 'queue'"  title="Processing" value="queue">
                 <template v-slot:prepend>
                     <i class="fa-solid fa-list-check pr-2"></i>
                 </template>
             </v-list-item>
-            <v-list-item :to="{ name: 'Quelist' }"  title="Queue list" value="queuelist">
+            <v-list-item @click="selectedItem = 'queuelist'"  title="Queue list" value="queuelist">
+                <template v-slot:prepend>
+                    <i class="fa-solid fa-list-check pr-2"></i>
+                </template>
+            </v-list-item>
+            <v-list-item :to="{ name: 'Quelist' }"  title="Queue list full screen">
                 <template v-slot:prepend>
                     <i class="fa-solid fa-list-ul pr-2"></i>
                 </template>
@@ -48,7 +53,11 @@
         </v-navigation-drawer>
         <v-main>
             <v-container class="h-screen"  v-if="selectedItem === 'queue'">
-                test
+                <Processing></Processing>
+            </v-container>
+            <v-container class="h-screen"  v-else-if="selectedItem === 'queuelist'">
+                <h2 class="ml-3 mt-10">Queue list</h2>
+                <QueueList></QueueList>
             </v-container>
             <v-container class="h-screen pt-10" v-else>
                 <TableContoller></TableContoller>
@@ -60,9 +69,13 @@
 
 <script>
 import TableContoller from '../components/TableContoller.vue';
+import QueueList from '../components/Queue.vue'
+import Processing from '../components/Processing.vue';
     export default {
         components:{
-            TableContoller
+            TableContoller,
+            QueueList,
+            Processing
         },
       data () {
         return {

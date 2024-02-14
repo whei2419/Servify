@@ -7,6 +7,7 @@ export const useAppointmentStore = defineStore("appointmentStore", {
             appointmentDate: null,
             appointmentEmail: null,
             appointmentInputList: null,
+            documentId:null
         },
         details: {},
     }),
@@ -36,7 +37,6 @@ export const useAppointmentStore = defineStore("appointmentStore", {
             this.appointmentData = data;
         },
         saveDetails(data) {
-            console.log(data);
             this.details = data;
         },
         getData() {

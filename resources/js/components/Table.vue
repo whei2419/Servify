@@ -1,22 +1,22 @@
 <template>
     <v-card
     flat
-      title="Appointment list"
       class="pa-3 rounded-sm"
     >
-    <i class="fa-solid fa-magnifying-glass"></i>
       <template v-slot:text>
+        <div class="header">
+
         <v-text-field
           v-model="search"
           label="Search"
-          prepend-inner-icon="fa-solid fa-magnifying-glass"
           single-line
           variant="outlined"
           hide-details
           class="search"
         >
-
         </v-text-field>
+        </div>
+
       </template>
 
       <v-data-table
@@ -130,6 +130,24 @@
           ],
         }
       },
+      methods: {
+        getList() {
+      var token = localStorage.getItem("token");
+      axios({
+        method: "post",
+        url: `${config.baseUrl}/appointment/appointmentList`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.error("Error occurred:", error);
+        });
+    },
+      }
     }
   </script>
 
