@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email');
             $table->json('values');
             $table->unsignedBigInteger('status_id');
+            $table->unsignedBigInteger('document_id');
             $table->string('code')->nullable();
 
             $table->timestamps();
@@ -24,6 +25,12 @@ return new class extends Migration
             $table->index(["status_id"], 'appointment-status');
             $table->foreign('status_id', 'appointment-status')
             ->references('id')->on('status')
+            ->onDelete('restrict')
+            ->onUpdate('restrict');
+
+            $table->index(["document_id"], 'appointment-documents');
+            $table->foreign('document_id', 'appointment-documents')
+            ->references('id')->on('documents')
             ->onDelete('restrict')
             ->onUpdate('restrict');
         });
