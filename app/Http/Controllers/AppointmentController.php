@@ -224,6 +224,64 @@ class AppointmentController extends Controller
             event(new QueueEvent($queueList));
 
             return $data;
+        }else if($appointment->document_id == 3)
+        {
+             //return $values;
+            // $name = $values[]
+            $data = $this->generateIndigency($values[0]->value,$values[2]->value,$values[1]->value,$appointment->date);
+            $appointment->status_id = 4;
+            $appointment->save();
+
+            $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
+            ->where('appointments.status_id',2)
+            ->orWhere('appointments.status_id',3)
+            ->orderBy('queues.id', 'asc')
+            ->get()->map(function ($item) {
+                return $item->toArray();
+            });
+
+            event(new QueueEvent($queueList));
+
+            return $data;
+        } else if($appointment->document_id == 4)
+        {
+             //return $values;
+            // $name = $values[]
+            $data = $this->generateResidency($values[0]->value,$values[1]->value,$appointment->date);
+            $appointment->status_id = 4;
+            $appointment->save();
+
+            $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
+            ->where('appointments.status_id',2)
+            ->orWhere('appointments.status_id',3)
+            ->orderBy('queues.id', 'asc')
+            ->get()->map(function ($item) {
+                return $item->toArray();
+            });
+
+            event(new QueueEvent($queueList));
+
+            return $data;
+        }
+        else if($appointment->document_id == 5)
+        {
+             //return $values;
+            // $name = $values[]
+            $data = $this->generateTricycle($values[0]->value,$values[1]->value,$values[2]->value,$values[3]->value,$values[4]->value,$values[5]->value,$values[6]->value,$appointment->date);
+            $appointment->status_id = 4;
+            $appointment->save();
+
+            $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
+            ->where('appointments.status_id',2)
+            ->orWhere('appointments.status_id',3)
+            ->orderBy('queues.id', 'asc')
+            ->get()->map(function ($item) {
+                return $item->toArray();
+            });
+
+            event(new QueueEvent($queueList));
+
+            return $data;
         }
 
        
@@ -285,6 +343,92 @@ class AppointmentController extends Controller
             return response()->download($outputFile)->deleteFileAfterSend(true);
     }
 
+    public function generateIndigency($name, $age, $purpose,$dates)
+    {
+            // Load the Word template file
+            $templateFile = public_path('templates/indigency-2022-NEW.docx');
+            $templateProcessor = new TemplateProcessor($templateFile);
+
+            // Replace placeholders with dynamic data
+            $templateProcessor->setValue('name', $name);
+            $templateProcessor->setValue('age', $age);
+            $templateProcessor->setValue('purpose', $purpose);
+            $date = new DateTime($dates);
+            // Extract day and month
+                $day = $date->format('d'); // Format 'd' returns day with leading zeros (01-31)
+                $month = $date->format('F');
+    
+                $templateProcessor->setValue('day', $day);
+                $templateProcessor->setValue('month', $month);
+
+            // Save the modified document
+            $name = str_replace(' ', '', $name);
+            $outputFile = storage_path('app/public/generated/indigency-2022-NEW'.$name.'.docx');
+            $templateProcessor->saveAs($outputFile);
+
+            // Get the URL for the stored file
+            return response()->download($outputFile)->deleteFileAfterSend(true);
+    }
+
+    public function generateResidency($name, $purpose,$dates)
+    {
+            // Load the Word template file
+            $templateFile = public_path('templates/RESIDENCY-2023.docx');
+            $templateProcessor = new TemplateProcessor($templateFile);
+
+            // Replace placeholders with dynamic data
+            $templateProcessor->setValue('name', $name);
+            $templateProcessor->setValue('purpose', $purpose);
+            $date = new DateTime($dates);
+            // Extract day and month
+                $day = $date->format('d'); // Format 'd' returns day with leading zeros (01-31)
+                $month = $date->format('F');
+    
+                $templateProcessor->setValue('day', $day);
+                $templateProcessor->setValue('month', $month);
+
+            // Save the modified document
+            $name = str_replace(' ', '', $name);
+            $outputFile = storage_path('app/public/generated/residency'.$name.'.docx');
+            $templateProcessor->saveAs($outputFile);
+
+            // Get the URL for the stored file
+            return response()->download($outputFile)->deleteFileAfterSend(true);
+    }
+
+    public function generateTricycle($name, $location,$color,$motor,$plate,$body,$chasis,$dates)
+    {
+            // Load the Word template file
+            $templateFile = public_path('templates/TRICYCLE-2019.docx');
+            $templateProcessor = new TemplateProcessor($templateFile);
+
+            // Replace placeholders with dynamic data
+            $templateProcessor->setValue('name', $name);
+            $templateProcessor->setValue('location', $location);
+            $templateProcessor->setValue('color', $color);
+            $templateProcessor->setValue('plate', $plate);
+            $templateProcessor->setValue('motor', $motor);
+            $templateProcessor->setValue('body', $body);
+            $templateProcessor->setValue('chasis', $chasis);
+
+
+            $date = new DateTime($dates);
+            // Extract day and month
+                $day = $date->format('d'); // Format 'd' returns day with leading zeros (01-31)
+                $month = $date->format('F');
+    
+                $templateProcessor->setValue('day', $day);
+                $templateProcessor->setValue('month', $month);
+
+            // Save the modified document
+            $name = str_replace(' ', '', $name);
+            $outputFile = storage_path('app/public/generated/TRICYCLE-2019'.$name.'.docx');
+            $templateProcessor->saveAs($outputFile);
+
+            // Get the URL for the stored file
+            return response()->download($outputFile)->deleteFileAfterSend(true);
+    }
+
     public function generateBusinessClearance($name, $trade, $type,$location,$dates)
     {
             // Load the Word template file
@@ -316,6 +460,7 @@ class AppointmentController extends Controller
             // Get the URL for the stored file
             return response()->download($outputFile)->deleteFileAfterSend(true);
     }
+    
 
     public function generateClearance(Request $request)
     {
