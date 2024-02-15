@@ -121,6 +121,14 @@
         </div>
       </v-card>
     </div>
+
+    <v-card class="maincontainer pa-3" v-if="!isProcessing" height="600" >
+        <v-btn class="start-button" color="indigo-darken-3"  @click="handleNext">
+        Start Queue
+        <i class="fa-solid fa-play pl-2"></i>
+        </v-btn>
+    </v-card>
+
   </v-container>
 </template>
 
@@ -137,6 +145,7 @@ export default {
       selectedValue: "",
       loading: false,
       isEdit: false,
+      isProcessing:false
     };
   },
   computed: {
@@ -193,7 +202,6 @@ export default {
     },
 
     handleNext() {
-      console.log(this.userData.appointment_id);
       var token = localStorage.getItem("token");
       axios({
         method: "post",
@@ -205,11 +213,14 @@ export default {
           appointment_id: this.userData.appointment_id,
         },
       })
-        .then((res) => {})
+        .then((res) => {
+            this.getList();
+        })
         .catch((error) => {
           console.error("Error occurred:", error);
         });
     },
+
     handleSubmit(values) {
       var token = localStorage.getItem("token");
       const inputs = values.target;
@@ -259,6 +270,7 @@ export default {
           const data = res.data.appointment;
           this.list = res.data.appointment;
           const processingData = {};
+          const noQueue = 0;
 
           for (let i = 0; i < data.length; i++) {
             const item = data[i];
@@ -276,6 +288,9 @@ export default {
               this.userData = itemData;
             }
           }
+
+          const hasStatusThree = this.list.some(item => item.status_id === 3);
+            this.isProcessing = hasStatusThree;
         })
         .catch((error) => {
           console.error("Error occurred:", error);
@@ -379,5 +394,15 @@ export default {
     display: flex;
     gap: 10px;
   }
+}
+.start-button {
+    width: 200px;
+    min-height: 60px;
+}
+
+.maincontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>
