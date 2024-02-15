@@ -160,6 +160,12 @@ class AppointmentController extends Controller
             ]);
         }
 
+        $current = Appointment::where('status_id',3)->first();
+        if(!empty($current)){
+            $current->status_id = 4;
+            $current->save();
+        }
+
         $appointment = Appointment::find($queue->appointment_id);
         $appointment->status_id = 3;
         $appointment->save();
@@ -188,99 +194,24 @@ class AppointmentController extends Controller
         $values = json_decode($appointment->values);
         if($appointment->document_id == 1)
         {
-             //return $values;
-            // $name = $values[]
             $data = $this->generateBrgyClearance($values[0]->value,$values[2]->value,$values[1]->value,$appointment->date);
-            $appointment->status_id = 4;
-            $appointment->save();
-
-            $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
-            ->where('appointments.status_id',2)
-            ->orWhere('appointments.status_id',3)
-            ->orderBy('queues.id', 'asc')
-            ->get()->map(function ($item) {
-                return $item->toArray();
-            });
-
-            event(new QueueEvent($queueList));
-
             return $data;
         }else if($appointment->document_id == 2)
         {
-             //return $values;
-            // $name = $values[]
             $data = $this->generateBusinessClearance($values[0]->value,$values[1]->value,$values[2]->value,$values[3]->value,$appointment->date);
-            $appointment->status_id = 4;
-            $appointment->save();
-
-            $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
-            ->where('appointments.status_id',2)
-            ->orWhere('appointments.status_id',3)
-            ->orderBy('queues.id', 'asc')
-            ->get()->map(function ($item) {
-                return $item->toArray();
-            });
-
-            event(new QueueEvent($queueList));
-
             return $data;
         }else if($appointment->document_id == 3)
         {
-             //return $values;
-            // $name = $values[]
             $data = $this->generateIndigency($values[0]->value,$values[2]->value,$values[1]->value,$appointment->date);
-            $appointment->status_id = 4;
-            $appointment->save();
-
-            $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
-            ->where('appointments.status_id',2)
-            ->orWhere('appointments.status_id',3)
-            ->orderBy('queues.id', 'asc')
-            ->get()->map(function ($item) {
-                return $item->toArray();
-            });
-
-            event(new QueueEvent($queueList));
-
             return $data;
         } else if($appointment->document_id == 4)
         {
-             //return $values;
-            // $name = $values[]
             $data = $this->generateResidency($values[0]->value,$values[1]->value,$appointment->date);
-            $appointment->status_id = 4;
-            $appointment->save();
-
-            $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
-            ->where('appointments.status_id',2)
-            ->orWhere('appointments.status_id',3)
-            ->orderBy('queues.id', 'asc')
-            ->get()->map(function ($item) {
-                return $item->toArray();
-            });
-
-            event(new QueueEvent($queueList));
-
             return $data;
         }
         else if($appointment->document_id == 5)
         {
-             //return $values;
-            // $name = $values[]
             $data = $this->generateTricycle($values[0]->value,$values[1]->value,$values[2]->value,$values[3]->value,$values[4]->value,$values[5]->value,$values[6]->value,$appointment->date);
-            $appointment->status_id = 4;
-            $appointment->save();
-
-            $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
-            ->where('appointments.status_id',2)
-            ->orWhere('appointments.status_id',3)
-            ->orderBy('queues.id', 'asc')
-            ->get()->map(function ($item) {
-                return $item->toArray();
-            });
-
-            event(new QueueEvent($queueList));
-
             return $data;
         }
 
