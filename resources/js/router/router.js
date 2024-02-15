@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory  } from "vue-router";
 import Login from "../pages/Login.vue";
 import Home from "../pages/Welcome.vue";
 import Appointment from "../pages/CreateAppointment.vue";
@@ -53,7 +53,7 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(import.meta.env.VITE_BASE_URL),
     routes
 });
 export default router;

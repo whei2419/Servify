@@ -19,7 +19,7 @@ class AppointmentController extends Controller
 {
     public function add(Request $request)
     {
-        $validate = Validator::make($request->all(), 
+        $validate = Validator::make($request->all(),
         [
             'date' => 'required',
             'email' => 'required|email',
@@ -46,10 +46,10 @@ class AppointmentController extends Controller
             new \BaconQrCode\Renderer\RendererStyle\RendererStyle(400),
             new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
         );
-    
+
         $writer = new Writer($renderer);
         $qrCode = $writer->writeString($appointment->code);
-    
+
         Mail::send([], [], function ($message) use ($qrCode,$request) {
             $message->to($request->email)
                 ->subject('QR Code')
@@ -96,7 +96,7 @@ class AppointmentController extends Controller
         ]);
 
         $appointment = Appointment::where('code',$request->code)->first();
-        
+
         if(empty($appointment))
         {
             return response()->json([
@@ -111,7 +111,7 @@ class AppointmentController extends Controller
                 'status' => 'Already in queue',
             ]);
         }
-        
+
         $queue = new Queue;
         $queue->appointment_id = $appointment->id;
         $queue->save();
@@ -126,7 +126,7 @@ class AppointmentController extends Controller
             ->get()->map(function ($item) {
                 return $item->toArray();
             });
-            
+
         //return $queueList;
 
         event(new QueueEvent($queueList));
@@ -138,11 +138,11 @@ class AppointmentController extends Controller
 
     public function queueList(Request $request)
     {
-      
+
         $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
             ->where('appointments.status_id',2)
             ->orWhere('appointments.status_id',3)->get();
-            
+
         return response()->json([
             'appointment' => $queueList,
         ]);
@@ -152,7 +152,7 @@ class AppointmentController extends Controller
     {
         $queue = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
             ->where('appointments.status_id',2)->orderBy('queues.id','asc')->first();
-      
+
         if(empty($queue))
         {
             return response()->json([
@@ -163,7 +163,7 @@ class AppointmentController extends Controller
         $appointment = Appointment::find($queue->appointment_id);
         $appointment->status_id = 3;
         $appointment->save();
-        
+
         $queueList = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
         ->where('appointments.status_id',2)
         ->orWhere('appointments.status_id',3)
@@ -204,13 +204,13 @@ class AppointmentController extends Controller
         }
 
         $appointment = Appointment::paginate($request->limit);
-        
+
         return $appointment;
     }
 
     public function editAppointment(Request $request)
     {
-        $validate = Validator::make($request->all(), 
+        $validate = Validator::make($request->all(),
         [
             'date' => 'required',
             'email' => 'required|email',
@@ -229,25 +229,24 @@ class AppointmentController extends Controller
         ]);
     }
 
-    public function generateBrgyClearance($name, $age, $purpose,$date)
+    public function generateBrgyClearance($name, $age, $purpose, $date)
     {
-            // Load the Word template file
-            $templateFile = public_path('templates/BRGY-CLEARANCE-2019.docx');
-            $templateProcessor = new TemplateProcessor($templateFile);
+        // Load the Word template file
+        $templateFile = public_path('templates/BRGY-CLEARANCE-2019.docx');
+        $templateProcessor = new TemplateProcessor($templateFile);
 
-            // Replace placeholders with dynamic data
-            $templateProcessor->setValue('name', $name);
-            $templateProcessor->setValue('age', $age);
-            $templateProcessor->setValue('purpose', $purpose);
-            $templateProcessor->setValue('date', $date);
+        // Replace placeholders with dynamic data
+        $templateProcessor->setValue('name', $name);
+        $templateProcessor->setValue('age', $age);
+        $templateProcessor->setValue('purpose', $purpose);
+        $templateProcessor->setValue('date', $date);
 
-            // Save the modified document
-            $outputFile = storage_path('app/public/generated/barangay_clearance_'.$name.'.docx');
-            $templateProcessor->saveAs($outputFile);
+        // Save the modified document
+        $outputFile = storage_path('app/public/generated/barangay_clearance_'.$name.'.docx');
+        $templateProcessor->saveAs($outputFile);
 
-            // Get the URL for the stored file
-            $downloadUrl = url('/generated/barangay_clearance_'.$name.'.docx');
-            return $downloadUrl;
+        // Return the file for download
+        return response()->download($outputFile, 'barangay_clearance_'.$name.'.docx');
     }
 
     public function generateClearance(Request $request)

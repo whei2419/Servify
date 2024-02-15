@@ -1,6 +1,5 @@
 <template>
   <v-container>
-
     <div v-for="(item, index) in list" :key="index" class="queue">
       <v-card max-width="900" v-if="item.status_id === 3" class="mb-4 mx-auto">
         <template v-slot:title>
@@ -17,8 +16,9 @@
                 <i v-if="isEdit" class="fa-solid fa-circle-xmark ml-2"></i>
                 <i v-if="!isEdit" class="fa-regular fa-pen-to-square ml-2"></i>
               </v-btn>
-              <v-btn color="indigo-darken-3">
-                <span>Download</span> <i class="fa-solid fa-down-long ml-2"></i>
+              <v-btn @click="download" color="indigo-darken-3">
+                <span>Download</span>
+                <i class="fa-solid fa-down-long ml-2"></i>
               </v-btn>
             </div>
           </div>
@@ -113,7 +113,8 @@
                 >Submit <i class="fa-solid fa-paper-plane pl-2"></i
               ></v-btn>
               <v-btn v-if="!isEdit" color="indigo-darken-3" @click="handleNext">
-                Next <i class="fa-solid fa-circle-right pl-2"></i>
+                Next
+                <i class="fa-solid fa-circle-right pl-2"></i>
               </v-btn>
             </div>
           </v-form>
@@ -160,9 +161,39 @@ export default {
     },
   },
   methods: {
-    handleNext() {
+    download() {
+      var token = localStorage.getItem("token");
+      axios({
+        method: "post",
+        url: `${config.baseUrl}/appointment/download?code=${this.userData.code}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        responseType: "blob", // Set responseType to 'blob' to receive binary data
+      })
+        .then((response) => {
+          const contentDisposition = response.headers["content-disposition"];
+          const fileNameMatch =
+            contentDisposition && contentDisposition.match(/filename="(.+)"/);
+          const fileName = fileNameMatch ? fileNameMatch[1] : "file.docx";
 
-        console.log(this.userData.appointment_id)
+          const blob = new Blob([response.data]);
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", fileName);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+        })
+        .catch((error) => {
+          console.error("Error downloading file:", error);
+        });
+    },
+
+    handleNext() {
+      console.log(this.userData.appointment_id);
       var token = localStorage.getItem("token");
       axios({
         method: "post",
@@ -174,8 +205,7 @@ export default {
           appointment_id: this.userData.appointment_id,
         },
       })
-        .then((res) => {
-        })
+        .then((res) => {})
         .catch((error) => {
           console.error("Error occurred:", error);
         });
