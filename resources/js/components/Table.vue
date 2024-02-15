@@ -1,56 +1,93 @@
 <template>
-    <v-card
-    flat
-      class="pa-3 rounded-sm"
+  <v-card flat class="pa-3 rounded-sm">
+    <h2 class="mb-2">Appointment list</h2>
+    <v-text-field
+      v-model="search"
+      @change="getList"
+      label="Search Qr code"
+      outlined
+    ></v-text-field>
+    <v-data-table-server
+      v-model:items-per-page="itemsPerPage"
+      :headers="headers"
+      :items-length="totalItems"
+      :items="items"
+      :loading="loading"
+      :search="search"
+      item-value="name"
+      @update:options="getList"
+      class="border"
     >
-      <template v-slot:text>
-        <div class="header">
+      <template v-slot:item.actions="{ item }">
+        <div class="w-100 d-flex">
+          <v-dialog width="800">
+            <template v-slot:activator="{ props }">
+              <v-btn v-bind="props"> <i class="fa-solid fa-eye"></i> </v-btn>
+            </template>
 
-        <v-text-field
-          v-model="search"
-          label="Search"
-          single-line
-          variant="outlined"
-          hide-details
-          class="search"
-        >
-        </v-text-field>
+            <template v-slot:default="{ isActive }">
+              <v-card :title="item.code">
+                <v-card-text>
+                  <div class="d-inline-block mr-3 border px-5 py-2 rounded-sm" v-for="(item,index) in buildJson(item.values)" :key="index">
+                    <p> <span>{{ item.name }}: </span> {{ item.value }}</p>
+                  </div>
+                </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+
+                  <v-btn
+                    text="Close"
+                    @click="isActive.value = false"
+                  ></v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
+          <v-btn>
+            <i class="fa-solid fa-trash"></i>
+          </v-btn>
+          <v-btn>
+            <i class="fa-solid fa-pen-to-square"></i>
+          </v-btn>
         </div>
-
       </template>
-
-      <v-data-table
-        class="border"
-        :headers="headers"
-        :items="items"
-        :search="search"
-      ></v-data-table>
-    </v-card>
+    </v-data-table-server>
+  </v-card>
 </template>
 
   <script>
-  import axios from "axios";
+import axios from "axios";
 import config from "../utils.js";
-    export default {
-      data () {
-        return {
-          search: '',
-          headers: [
-            {
+export default {
+  data() {
+    return {
+      loading: true,
+      itemsPerPage: 10,
+      totalItems: 0,
 
-              key: 'id',
-              sortable: false,
-              title: 'Id',
-            },
-            { key: 'code', title: 'Qr code' },
-            { key: 'email', title: 'Email' },
-          ],
-        items:[]
-          ,
-        }
-      },
-      methods: {
-        getList() {
+      search: "",
+      headers: [
+        {
+          key: "id",
+          sortable: false,
+          title: "Id",
+        },
+        { key: "code", title: "Qr code" },
+        { key: "date", title: "Date" },
+        { key: "status.name", title: "Status" },
+        { key: "email", title: "Email" },
+        { key: "document.name", title: "Document name" },
+        { key: "actions", title: "Actions" },
+      ],
+      items: [],
+    };
+  },
+  methods: {
+    buildJson(data){
+        return JSON.parse(data);
+    },
+    getList() {
       var token = localStorage.getItem("token");
       axios({
         method: "post",
@@ -58,33 +95,35 @@ import config from "../utils.js";
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        data : {
-            limit:10,
-        }
+        data: {
+          limit: this.itemsPerPage,
+          code:this.search
+
+        },
       })
         .then((res) => {
+          this.loading = false;
           this.items = res.data.data;
+          this.totalItems = res.data.total;
+          this.itemsPerPage = res.data.per_page;
         })
         .catch((error) => {
           console.error("Error occurred:", error);
         });
     },
-      },
-      mounted() {
-        this.getList();
-      }
-    }
-  </script>
+  },
+  mounted() {},
+};
+</script>
 
 <style lang="scss">
 .v-card-text {
-    padding: 0;
-    margin-bottom: 20px;
+  padding: 0;
+  margin-bottom: 20px;
 
-    .search {
-        width: 300px;
-        margin-left: auto;
-    }
-
+  .search {
+    width: 300px;
+    margin-left: auto;
+  }
 }
 </style>
