@@ -229,26 +229,24 @@ class AppointmentController extends Controller
         ]);
     }
 
-    public function generateBrgyClearance($name, $age, $purpose,$date)
+    public function generateBrgyClearance($name, $age, $purpose, $date)
     {
-            // Load the Word template file
-            $templateFile = public_path('templates/BRGY-CLEARANCE-2019.docx');
-            $templateProcessor = new TemplateProcessor($templateFile);
+        // Load the Word template file
+        $templateFile = public_path('templates/BRGY-CLEARANCE-2019.docx');
+        $templateProcessor = new TemplateProcessor($templateFile);
 
-            // Replace placeholders with dynamic data
-            $templateProcessor->setValue('name', $name);
-            $templateProcessor->setValue('age', $age);
-            $templateProcessor->setValue('purpose', $purpose);
-            $templateProcessor->setValue('date', $date);
+        // Replace placeholders with dynamic data
+        $templateProcessor->setValue('name', $name);
+        $templateProcessor->setValue('age', $age);
+        $templateProcessor->setValue('purpose', $purpose);
+        $templateProcessor->setValue('date', $date);
 
-            // Save the modified document
-            $outputFile = storage_path('app/public/generated/barangay_clearance_'.$name.'.docx');
-            $templateProcessor->saveAs($outputFile);
+        // Save the modified document
+        $outputFile = storage_path('app/public/generated/barangay_clearance_'.$name.'.docx');
+        $templateProcessor->saveAs($outputFile);
 
-            // Get the URL for the stored file
-            $downloadUrl = url('/generated/barangay_clearance_'.$name.'.docx');
-
-            return $downloadUrl;
+        // Return the file for download
+        return response()->download($outputFile, 'barangay_clearance_'.$name.'.docx');
     }
 
     public function generateClearance(Request $request)
