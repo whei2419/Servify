@@ -175,7 +175,7 @@ class AppointmentController extends Controller
         event(new QueueEvent($queueList));
 
         return response()->json([
-            'status' => 'Success',
+            'appointment' => $queueList,
         ]);
     }
     public function download(Request $request)
