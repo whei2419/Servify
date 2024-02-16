@@ -7,7 +7,7 @@
         :height="200"
         aspect-ratio="1/1"
         cover
-        src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+        src="images/logo.png"
       ></v-img>
       <h1 class="text-h6 text-md-h5 text-lg-h4 text-center text-bold mb-3">
         Welcome to Servify
@@ -39,13 +39,13 @@
         <div class="form-control">
           <input
             v-model="date"
-            class="date-picker"
+            class="date-picker custom-input"
             type="date"
             :min="systemDate"
           />
         </div>
         <div class="form-control">
-          <input v-model="time" class="time-picker" type="time" />
+          <input v-model="time" class="time-picker custom-input" type="time" />
         </div>
       </div>
       <v-btn
@@ -100,7 +100,6 @@ export default {
     handleClick() {
         if(this.time === null || this.date === null){
             this.errorMessage = 'Please complete all fields to check available date and time';
-            console.log('test');
             return;
         }
       const time = moment(this.time, "HH:mm")
@@ -161,12 +160,11 @@ export default {
   created() {
     this.getDocuments();
     this.systemDate = moment().format("YYYY-MM-DD");
-    console.log(this.systemDate);
   },
 };
 </script>
 
-  <style lang="scss" scoped>
+<style lang="scss" scoped>
 .date-time {
   display: flex;
   justify-content: center;
@@ -176,24 +174,6 @@ export default {
 
   .form-control {
     width: 100%;
-  }
-
-  input {
-    padding: 5px 20px;
-    border-bottom: 1px solid rgb(133, 133, 133);
-    border-radius: 0px;
-    background: transparent;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    height: 50px;
-    width: 100%;
-    background: #2a2a2a;
-    &:focus {
-      background: rgb(133, 133, 133);
-      outline: none;
-      border-bottom: 2px solid #ffffff;
-      transition: all 0.5 ease-in-out;
-    }
   }
 }
 .text-danger {
