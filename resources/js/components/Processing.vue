@@ -4,7 +4,7 @@
       <v-card max-width="900" v-if="item.status_id === 3" class="mb-4 mx-auto">
         <template v-slot:title>
           <div class="title-container">
-            <div class="title-text">
+            <div class="title-text pr-3">
               <h2>Appointment date : {{ fomatDate }}</h2>
               <p class="subtitle">Code: {{ userData.code }}</p>
             </div>
