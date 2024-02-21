@@ -45,7 +45,7 @@
           />
         </div>
         <div class="form-control">
-          <input v-model="time" class="time-picker custom-input" type="time" />
+          <input v-model="time"  min="08:00" max="17:00" class="time-picker custom-input" type="time" @change="validateTime" />
         </div>
       </div>
       <v-btn
@@ -92,6 +92,17 @@ export default {
     };
   },
   methods: {
+    validateTime() {
+      const selectedTime = new Date(`2000-01-01T${this.time}`);
+      const startTime = new Date(`2000-01-01T08:00`);
+      const endTime = new Date(`2000-01-01T17:00`);
+
+      if (selectedTime < startTime || selectedTime > endTime) {
+        this.time = '08:00';
+      }
+
+      this.errorMessage = 'Please add a time between 8:00am to 5:00pm'
+    },
     itemProps(item) {
       return {
         title: item.name,
