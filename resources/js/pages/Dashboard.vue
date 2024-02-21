@@ -62,7 +62,7 @@
               <i class="fa-solid fa-qrcode pr-2"></i>
             </template>
           </v-list-item>
-          <v-list-item title="Loguot" @click="handleLogout">
+          <v-list-item title="Logout" @click="handleLogout">
             <template v-slot:prepend>
                 <i class="fa-solid fa-right-from-bracket pr-2"></i>
             </template>

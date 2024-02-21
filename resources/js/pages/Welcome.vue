@@ -98,10 +98,9 @@ export default {
       const endTime = new Date(`2000-01-01T17:00`);
 
       if (selectedTime < startTime || selectedTime > endTime) {
+        this.errorMessage = 'Please add a time between 8:00am to 5:00pm'
         this.time = '08:00';
       }
-
-      this.errorMessage = 'Please add a time between 8:00am to 5:00pm'
     },
     itemProps(item) {
       return {
