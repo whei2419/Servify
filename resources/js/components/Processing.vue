@@ -113,7 +113,7 @@
                 class="submit-button"
                 >Submit <i class="fa-solid fa-paper-plane pl-2"></i
               ></v-btn>
-              <v-btn v-if="!isEdit" color="indigo-darken-3" @click="handleNext">
+              <v-btn v-if="!isEdit && list.length != 1" color="indigo-darken-3" @click="handleNext">
                 Next
                 <i class="fa-solid fa-circle-right pl-2"></i>
               </v-btn>
