@@ -25,11 +25,13 @@
           v-model="formData.password"
           :rules="passwordRules"
           label="Password"
+          type="Password"
         ></v-text-field>
         <v-text-field
           v-model="formData.confirmPassword"
           :rules="confirmPasswordRules"
           label="Confirm password"
+          type="Password"
         ></v-text-field>
         <v-btn
           type="submit"
@@ -86,7 +88,7 @@ export default {
                 },
             })
             .then((res) => {
-                console.log(res)
+                this.$router.push({ name: "Dashboard" });
             })
             .catch((error) => {
                 console.error('Error occurred:', error);

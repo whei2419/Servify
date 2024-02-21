@@ -19,20 +19,19 @@
       class="border"
     >
       <template v-slot:item.actions="{ item }">
-        <div class="w-100 d-flex">
+        <div class="w-100 d-flex ga-3">
           <v-dialog width="800">
             <template v-slot:activator="{ props }">
-              <v-btn v-bind="props"> <i class="fa-solid fa-eye"></i> </v-btn>
+              <v-btn size="sm" elevation="0" v-bind="props"> <i class="fa-solid fa-eye"></i> </v-btn>
             </template>
 
             <template v-slot:default="{ isActive }">
-              <v-card :title="item.code">
+              <v-card :title="item.document.name">
                 <v-card-text>
                   <div class="d-inline-block mr-3 border px-5 py-2 rounded-sm" v-for="(item,index) in buildJson(item.values)" :key="index">
                     <p> <span>{{ item.name }}: </span> {{ item.value }}</p>
                   </div>
                 </v-card-text>
-
                 <v-card-actions>
                   <v-spacer></v-spacer>
 
@@ -44,10 +43,10 @@
               </v-card>
             </template>
           </v-dialog>
-          <v-btn>
+          <v-btn size="sm" elevation="0">
             <i class="fa-solid fa-trash"></i>
           </v-btn>
-          <v-btn>
+          <v-btn size="sm" elevation="0">
             <i class="fa-solid fa-pen-to-square"></i>
           </v-btn>
         </div>

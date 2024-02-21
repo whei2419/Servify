@@ -26,7 +26,7 @@
               input.input.name
             }}</label>
             <input
-              class="input-text"
+              class="input-text custom-input"
               :name="input.input.name"
               type="text"
               :data-id="input.input.id"
@@ -43,7 +43,7 @@
                 input.input.name
               }}</label>
               <input
-                class="input-date"
+                class="input-date custom-input"
                 :name="input.input.name"
                 :data-id="input.input.id"
                 type="date"
@@ -63,7 +63,7 @@
                 input.input.name
               }}</label>
               <input
-                class="input-text"
+                class="input-text custom-input"
                 :name="input.input.name"
                 :data-id="input.input.id"
                 type="number"
@@ -204,25 +204,6 @@ export default {
 .form-control {
   label {
     font-size: $font-sm;
-  }
-  .input-text,
-  .input-date {
-    padding: 5px 20px;
-    border-bottom: 1px solid rgb(133, 133, 133);
-    border-radius: 0px;
-    background: transparent;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    height: 50px;
-    width: 100%;
-    background: #2a2a2a;
-
-    &:focus {
-      background: rgb(133, 133, 133);
-      outline: none;
-      border-bottom: 2px solid #ffffff;
-      transition: all 0.5 ease-in-out;
-    }
   }
 }
 .congratulation-card {

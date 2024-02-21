@@ -7,7 +7,7 @@
           :height="180"
           aspect-ratio="1/1"
           cover
-          src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+          src="images/logo.png"
         ></v-img>
         <h1 class="text-center mb-4">Sign in your Account</h1>
         <p v-if="message">{{ message }}</p>

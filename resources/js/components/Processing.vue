@@ -4,7 +4,7 @@
       <v-card max-width="900" v-if="item.status_id === 3" class="mb-4 mx-auto">
         <template v-slot:title>
           <div class="title-container">
-            <div class="title-text">
+            <div class="title-text pr-3">
               <h2>Appointment date : {{ fomatDate }}</h2>
               <p class="subtitle">Code: {{ userData.code }}</p>
             </div>
@@ -34,7 +34,7 @@
               >
                 <label class="mr-2" :for="input.name">{{ input.name }}</label>
                 <input
-                  class="input-text"
+                  class="input-text custom-input"
                   :name="input.name"
                   type="text"
                   :data-id="input.id"
@@ -53,11 +53,12 @@
                 >
                   <label class="mr-2" :for="input.id">{{ input.name }}</label>
                   <input
-                    class="input-date"
+                    class="input-date custom-input"
                     :name="input.id"
                     type="date"
                     :value="input.value"
                     :disabled="!isEdit"
+
                     required
                   />
                 </div>
@@ -74,7 +75,7 @@
                 >
                   <label class="mr-2" :for="input.id">{{ input.name }}</label>
                   <input
-                    class="input-text"
+                    class="input-text custom-input"
                     :name="input.name"
                     type="number"
                     :value="input.value"
@@ -112,7 +113,7 @@
                 class="submit-button"
                 >Submit <i class="fa-solid fa-paper-plane pl-2"></i
               ></v-btn>
-              <v-btn v-if="!isEdit" color="indigo-darken-3" @click="handleNext">
+              <v-btn v-if="!isEdit && list.length != 1" color="indigo-darken-3" @click="handleNext">
                 Next
                 <i class="fa-solid fa-circle-right pl-2"></i>
               </v-btn>
@@ -325,25 +326,6 @@ export default {
   label {
     font-size: $font-sm;
     color: #beb6b6;
-  }
-  .input-text,
-  .input-date {
-    padding: 5px 20px;
-    border-bottom: 1px solid rgb(133, 133, 133);
-    border-radius: 0px;
-    background: transparent;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    height: 50px;
-    width: 100%;
-    background: #2a2a2a;
-
-    &:focus {
-      background: rgb(133, 133, 133);
-      outline: none;
-      border-bottom: 2px solid #ffffff;
-      transition: all 0.5 ease-in-out;
-    }
   }
 }
 .content {
