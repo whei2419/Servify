@@ -307,5 +307,8 @@ export default {
     box-shadow: rgba(255, 251, 195, 0.2) 0px 8px 24px;
 
 }
+.main-container {
+    background: #fff ;
+}
 
 </style>
