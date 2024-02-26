@@ -264,6 +264,8 @@ export default {
     .title {
         h2 {
             margin-bottom: 2px;
+            font-size: 28px;
+
         }
         p {
             font-size: 14px;
