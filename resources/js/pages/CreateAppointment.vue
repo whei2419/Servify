@@ -1,5 +1,6 @@
 <template>
-  <v-container class="w-100 main-container">
+  <v-container class="w-100 main-container mt-11">
+    <Navbar></Navbar>
     <v-card
       class="mx-auto pa-9 mt-4 overflow-y-auto"
       elevation="2"
@@ -106,6 +107,7 @@
 </template>
 
 <script>
+import Navbar from "../components/Navbar.vue";
 import axios from "axios";
 import config from "../utils.js";
 import { useAppointmentStore } from "../store/AppointmentStore";
@@ -117,6 +119,9 @@ export default {
       appointmentData,
       formattedInputs: appointmentData.formatInputs,
     };
+  },
+  components:{
+    Navbar
   },
   data() {
     return {

@@ -1,7 +1,8 @@
 <template>
-  <v-container>
+  <div class="dashboard-container">
+    <h1 class="mb-4 title">Processing</h1>
     <div v-for="(item, index) in list" :key="index" class="queue">
-      <v-card max-width="900" v-if="item.status_id === 3" class="mb-4 mx-auto">
+      <v-card  v-if="item.status_id === 3" class="mb-4 mx-auto main-card">
         <template v-slot:title>
           <div class="title-container">
             <div class="title-text pr-3">
@@ -16,7 +17,7 @@
                 <i v-if="isEdit" class="fa-solid fa-circle-xmark ml-2"></i>
                 <i v-if="!isEdit" class="fa-regular fa-pen-to-square ml-2"></i>
               </v-btn>
-              <v-btn @click="download" color="indigo-darken-3">
+              <v-btn @click="download" class="primary-btn ">
                 <span>Download</span>
                 <i class="fa-solid fa-down-long ml-2"></i>
               </v-btn>
@@ -109,11 +110,11 @@
                 v-if="isEdit"
                 :loading="loading"
                 type="submit"
-                color="indigo-darken-3"
-                class="submit-button"
+
+                class="submit-button primary-btn"
                 >Submit <i class="fa-solid fa-paper-plane pl-2"></i
               ></v-btn>
-              <v-btn v-if="!isEdit && list.length != 1" color="indigo-darken-3" @click="handleNext">
+              <v-btn v-if="!isEdit && list.length != 1" class="primary-btn " @click="handleNext">
                 Next
                 <i class="fa-solid fa-circle-right pl-2"></i>
               </v-btn>
@@ -130,7 +131,7 @@
         </v-btn>
     </v-card>
 
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -314,7 +315,7 @@ export default {
 }
 .section {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two columns with equal width */
+  grid-template-columns: repeat(4, 1fr); /* Two columns with equal width */
   gap: 20px; /* Gap between grid items */
 }
 .section-radio {
@@ -386,5 +387,9 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.main-card{
+    border-radius: 8px !important;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 </style>
