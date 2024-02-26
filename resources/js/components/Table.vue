@@ -1,6 +1,7 @@
 <template>
-  <v-card flat class="pa-3 rounded-sm">
-    <h2 class="mb-2">Appointment list</h2>
+    <div class="dashboard-container">
+        <h1 class="mb-4 title">Queue list</h1>
+        <v-card flat class=" main-card">
     <v-text-field
       v-model="search"
       @change="getList"
@@ -53,6 +54,8 @@
       </template>
     </v-data-table-server>
   </v-card>
+    </div>
+
 </template>
 
   <script>
@@ -124,5 +127,10 @@ export default {
     width: 300px;
     margin-left: auto;
   }
+}
+.main-card{
+    border-radius: 8px !important;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px !important;
+    padding: 20px  !important;
 }
 </style>

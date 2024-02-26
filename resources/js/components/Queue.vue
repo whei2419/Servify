@@ -1,5 +1,6 @@
 <template>
-    <v-container>
+    <div class="dashboard-container">
+        <h1 class="mb-4 title">Queue list</h1>
       <div v-for="(item, index) in list" :key="index" class="queue">
       <v-card loading   v-if="item.status_id === 3" class="mb-4">
         <div class="content pa-5">
@@ -9,7 +10,7 @@
               <span>{{ item.code }}</span>
             </p>
           </div>
-          <div class="icon">
+          <div class="que-icon">
             <p>
               Processing..
               <span> <i class="fa-solid fa-spinner spinning"></i></span>
@@ -25,7 +26,7 @@
                 <span>{{ item.code }}</span>
               </p>
             </div>
-            <div class="icon">
+            <div class="que-icon">
               <p>
                 Waiting...
                 <span> <i class="fa-solid fa-hourglass-start"></i></span>
@@ -34,7 +35,7 @@
           </div>
         </v-card>
       </div>
-    </v-container>
+    </div>
 </template>
 
   <script>
@@ -85,15 +86,16 @@
 
   <style lang="scss" scoped>
   .content {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
+    padding: 20px 30px !important;
     i {
       color: #66bb6a;
     }
 
-    .icon {
+    .que-icon {
       i {
         font-size: 1rem;
       }
