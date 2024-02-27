@@ -1,6 +1,5 @@
 <template>
-    <div class="dashboard-container">
-        <h1 class="mb-4 title">Queue list</h1>
+    <div >
       <div v-for="(item, index) in list" :key="index" class="queue">
       <v-card loading   v-if="item.status_id === 3" class="mb-4">
         <div class="content pa-5">

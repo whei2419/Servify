@@ -9,7 +9,7 @@
             <span>{{ item.code }}</span>
           </p>
         </div>
-        <div class="icon">
+        <div class="que-icon">
           <p>
             Processing..
             <span> <i class="fa-solid fa-spinner spinning"></i></span>
@@ -25,7 +25,7 @@
               <span>{{ item.code }}</span>
             </p>
           </div>
-          <div class="icon">
+          <div class="que-icon">
             <p>
               Waiting...
               <span> <i class="fa-solid fa-hourglass-start"></i></span>
@@ -85,15 +85,16 @@ export default {
 
 <style lang="scss" scoped>
 .content {
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  padding: 20px 30px !important;
   i {
     color: #66bb6a;
   }
 
-  .icon {
+  .que-icon {
     i {
       font-size: 1rem;
     }
