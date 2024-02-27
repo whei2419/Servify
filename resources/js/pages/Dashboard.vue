@@ -19,8 +19,8 @@
           </template>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list density="compact" nav>
-            <v-list-item
+        <v-list class="main-nav" density="compact" nav>
+          <v-list-item
             @click="selectedItem = 'dashboard'"
             title="Dashboard"
             value="dashboard"
@@ -53,11 +53,6 @@
               </div>
             </template>
           </v-list-item>
-          <!-- <v-list-item :to="{ name: 'Quelist' }" title="Queue list full screen">
-            <div class="icon">
-              <i class="fa-solid fa-list-check fa-fw"></i>
-            </div>
-          </v-list-item> -->
           <v-list-item
             @click="selectedItem = 'apointment'"
             title="Appointments"
@@ -80,7 +75,7 @@
               </div>
             </template>
           </v-list-item>
-          <v-list-item class="" title="Logout" @click="handleLogout">
+          <v-list-item class="logout-item" title="Logout" @click="dialog = true">
             <template v-slot:prepend>
               <div class="icon">
                 <i class="fa-solid fa-right-from-bracket"></i>
@@ -94,16 +89,51 @@
           <Processing></Processing>
         </div>
         <div class="h-screen" v-else-if="selectedItem === 'queuelist'">
-          <QueueList></QueueList>
+          <div class="dashboard-container">
+            <div class="header-queue">
+                <h1 class="mb-4 title">Queue list</h1>
+                <button class="full-screen-icon" @click="goto()">
+                    <i class="fa-solid fa-expand"></i>
+                </button>
+            </div>
+
+            <QueueList></QueueList>
+          </div>
         </div>
         <div v-else-if="selectedItem === 'dashboard'">
-            <DashBoard></DashBoard>
+          <DashBoard></DashBoard>
         </div>
         <div class="h-screen pt-10" v-else>
           <TableContoller></TableContoller>
         </div>
       </v-main>
     </v-layout>
+    <v-dialog
+      v-model="dialog"
+      width="auto"
+    >
+      <v-card
+        width="400"
+        class="logout-dialog"
+      >
+      <div class="header mb-3">
+        <h3>Logout</h3>
+        <p class="text-center mt-10">Are you sure you want to logout?</p>
+      </div>
+        <div class="actions">
+            <v-btn
+            class="ms-auto danger-btn mr-2"
+            text="Cancel"
+            @click="dialog = false"
+          ></v-btn>
+          <v-btn
+            class="ms-auto primary-btn"
+            text="Confirm"
+            @click="handleLogout"
+          ></v-btn>
+        </div>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -119,16 +149,20 @@ export default {
     TableContoller,
     QueueList,
     Processing,
-    DashBoard
+    DashBoard,
   },
   data() {
     return {
       drawer: true,
       rail: false,
       selectedItem: "dashboard",
+      dialog:false
     };
   },
   methods: {
+    goto(){
+        this.$router.push({ name: "Quelist" });
+    },
     handleLogout() {
       var token = localStorage.getItem("token");
       axios({
@@ -162,8 +196,8 @@ export default {
       height: 30px !important;
     }
     img {
-        width: 30px !important;
-        height: 30px !important;
+      width: 30px !important;
+      height: 30px !important;
     }
   }
 }
@@ -172,7 +206,45 @@ export default {
   height: 30px !important;
 }
 .v-navigation-drawer {
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    border: solid #fff 1px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border: solid #fff 1px;
+}
+
+.header-queue {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    button {
+        padding: 5px 20px;
+        border-radius: 4px;
+        background: #FF9F2F;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        color: #fff;
+
+    }
+}
+
+.main-nav {
+    position: relative;
+    height: 91%;
+}
+.logout-item {
+    position: absolute;
+    z-index: 99;
+    bottom: 0;
+    left: 8;
+
+}
+.logout-dialog {
+    border-radius: 8px !important;
+    padding: 10px 20px 20px 20px;
+    height: 200px;
+
+    .actions {
+        margin-top: auto;
+        margin-left: auto;
+        align-items: end;
+    }
 }
 </style>

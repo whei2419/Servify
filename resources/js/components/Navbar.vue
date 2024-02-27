@@ -9,7 +9,7 @@
           <i class="fa-solid fa-bars"></i>
         </button>
         <ul class="nav-options">
-          <li><span class="icon"><i class="fa-solid fa-list"></i></span> Home</li>
+          <li @click="home"><span class="icon"><i class="fa-solid fa-list"></i></span> Home</li>
           <li><span class="icon"><i class="fa-solid fa-file"></i></span> Requirements</li>
           <li><span class="icon"><i class="fa-regular fa-hourglass-half"></i></span> About</li>
         </ul>

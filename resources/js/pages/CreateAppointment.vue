@@ -2,21 +2,25 @@
   <v-container class="w-100 main-container mt-11">
     <Navbar></Navbar>
     <v-card
-      class="mx-auto pa-9 mt-4 overflow-y-auto"
+      class="mx-auto pa-9 mt-16 overflow-y-auto form"
       elevation="2"
       max-width="800"
     >
-      <h1 class="text-h4 text-md-h5 text-lg-h4 text-center text-bold mb-2">
-        Appointment details
-      </h1>
-      <p class="mb-6 text-center">
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
-        illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-        explicabo
-      </p>
-      <v-divider></v-divider>
-      <v-form v-modal="formData" @submit.prevent="handleSubmit">
+      <div class="modal-title">
+        <div class="title">
+          <h2>Appointment details</h2>
+          <p>
+            Fill out this form to complete your
+            appointment
+          </p>
+        </div>
+      </div>
+
+      <v-form
+        class="form-border"
+        v-modal="formData"
+        @submit.prevent="handleSubmit"
+      >
         <div class="section my-6">
           <div
             class="form-control"
@@ -73,7 +77,6 @@
             </div>
           </div>
         </div>
-        <v-divider></v-divider>
         <div class="section-radio my-6">
           <div
             class="form-control"
@@ -95,10 +98,9 @@
           :loading="loading"
           type="submit"
           block
-          color="indigo-darken-3"
           size="x-large"
           variant="flat"
-          class="mt-2"
+          class="mt-2 primary-btn"
           >Submit details</v-btn
         >
       </v-form>
@@ -120,8 +122,8 @@ export default {
       formattedInputs: appointmentData.formatInputs,
     };
   },
-  components:{
-    Navbar
+  components: {
+    Navbar,
   },
   data() {
     return {
@@ -165,12 +167,12 @@ export default {
           date: date,
           email: userDetails.appointmentEmail,
           values: JSON.stringify(processData),
-          document_id:documentId
+          document_id: documentId,
         },
       })
         .then((res) => {
           useAppointmentStore().saveDetails(res.data.appointment);
-          this.$router.push({ name: "Details",});
+          this.$router.push({ name: "Details" });
           this.loading = false;
         })
         .catch((error) => {
@@ -231,6 +233,28 @@ export default {
       font-size: 4rem;
     }
   }
+}
+.form {
+  border-radius: 8px !important;
+}
+.modal-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    .title {
+        h2 {
+            margin-bottom: 2px;
+            font-size: 28px;
+
+        }
+        p {
+            font-size: 14px;
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+    }
 }
 </style>
 
