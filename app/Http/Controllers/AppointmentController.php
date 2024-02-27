@@ -17,6 +17,28 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Storage;
 class AppointmentController extends Controller
 {
+    public function dashboard(Request $request)
+    {
+        $reserve = Appointment::where('status_id',1)->count();
+        $appointment = Appointment::count();
+        $archive = Appointment::where('status_id',5)->count();
+        $documents = Appointment::select('document_id', \DB::raw('count(*) as appointment_count'))
+        ->where('status_id', 4)
+        ->groupBy('document_id')
+        ->orderByDesc('appointment_count')
+        ->limit(3) // Limit to the top 3 documents with the highest count
+        ->get();
+
+
+
+        return response()->json([
+            'pending' => $reserve,
+            'appointment' => $appointment,
+            'archive' => $archive,
+            'documents' => $documents
+
+        ], 200);
+    }
     public function add(Request $request)
     {
         $validate = Validator::make($request->all(), 

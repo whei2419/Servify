@@ -31,6 +31,8 @@
 
 <script>
 import DashboardTiles from "./DashboardTiles.vue";
+import axios from "axios";
+import config from "../utils.js";
 import { Bar } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -59,17 +61,17 @@ export default {
     return {
       pending: {
         title: "Pending Appointments",
-        count: 10,
+        count: 0,
         icon: "fa-solid fa-clock-rotate-left",
       },
       total: {
         title: "Total Appointments",
-        count: 10,
+        count: 0,
         icon: "fa-solid fa-calendar",
       },
       Archives: {
         title: "Archives Appointments",
-        count: 30,
+        count: 0,
         icon: "fa-solid fa-box-archive",
       },
       chartData: {
@@ -78,7 +80,7 @@ export default {
           {
             label: "Appointments",
             backgroundColor: ["#DF3F3F", "#FAEC30", "#5F5FFF"], // Example colors
-            data: [10, 10, 30],
+            data: [0, 0, 0],
           },
         ],
       },
@@ -97,6 +99,35 @@ export default {
       },
     };
   },
+  created() {
+    this.getDashboardData();
+  },
+  methods: {
+    getDashboardData() {
+      var token = localStorage.getItem("token");
+      axios({
+        method: "post",
+        url: `${config.baseUrl}/appointment/dashboard`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+        },
+      })
+        .then((res) => {
+          this.pending.count = res.data.pending;
+          this.total.count = res.data.appointment;
+          this.Archives.count = res.data.archive;
+          this.chartData.datasets[0].data[0] = this.pending.count;
+          this.chartData.datasets[0].data[1] = this.total.count
+          console.log(this.chartData.datasets[0].data[1]);
+
+        })
+        .catch((error) => {
+          console.error("Error occurred:", error);
+        });
+    },
+  },
 };
 </script>
 
@@ -106,6 +137,7 @@ export default {
   padding: 30px;
   box-sizing: border-box;
 }
+
 .chart-tile {
   background: #fff;
   border-radius: 8px;
