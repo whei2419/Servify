@@ -1,7 +1,7 @@
 <template>
   <div class="nav-container">
     <nav>
-      <span class="logo" @click="home">
+      <span class="logo" @click="goto('Home')">
         <img src="images/logo.png" alt="" />
       </span>
       <div ref="mainNav" class="options">
@@ -9,8 +9,8 @@
           <i class="fa-solid fa-bars"></i>
         </button>
         <ul class="nav-options">
-          <li @click="home"><span class="icon"><i class="fa-solid fa-list"></i></span> Home</li>
-          <li><span class="icon"><i class="fa-solid fa-file"></i></span> Requirements</li>
+          <li @click="goto('Home')"><span class="icon"><i class="fa-solid fa-list"></i></span> Home</li>
+          <li  @click="goto('Requirements')"><span class="icon"><i class="fa-solid fa-file"></i></span> Requirements</li>
           <li><span class="icon"><i class="fa-regular fa-hourglass-half"></i></span> About</li>
         </ul>
       </div>
@@ -26,8 +26,8 @@ export default {
         }
     },
     methods:{
-        home(){
-            this.$router.push({ name: "Home" });
+        goto(name){
+            this.$router.push({ name: name });
         }
     },
     watch:{

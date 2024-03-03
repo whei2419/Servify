@@ -6,7 +6,8 @@ import Register from "../pages/Register.vue";
 import Scanner from "../pages/Scanner.vue";
 import Quelist from "../pages/Quelist.vue";
 import Details from "../pages/AppointmentDetails.vue";
-import Dashboard from "../pages/Dashboard.vue"
+import Dashboard from "../pages/Dashboard.vue";
+import Requirements from "../pages/Requirements.vue"
 
 
 const routes = [
@@ -49,6 +50,11 @@ const routes = [
         path: '/details',
         component: Details,
         name: 'Details'
+    },
+    {
+        path: '/requirements',
+        component: Requirements,
+        name: 'Requirements'
     },
 ];
 

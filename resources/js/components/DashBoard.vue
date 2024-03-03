@@ -74,17 +74,18 @@ export default {
         count: 0,
         icon: "fa-solid fa-box-archive",
       },
-      chartData: {
+
+      chartData2: {
         labels: ["Pending", "Total", "Archives"],
         datasets: [
           {
-            label: "Appointments",
+            label: "Certificate",
             backgroundColor: ["#DF3F3F", "#FAEC30", "#5F5FFF"], // Example colors
-            data: [0, 0, 0],
+            data: [10, 10, 30],
           },
         ],
       },
-      chartData2: {
+      chartData: {
         labels: ["Pending", "Total", "Archives"],
         datasets: [
           {
@@ -102,7 +103,23 @@ export default {
   created() {
     this.getDashboardData();
   },
+
   methods: {
+    setChartData(data){
+    const chartData =  {
+        labels: ["Pending", "Total", "Archives"],
+        datasets: [
+          {
+            backgroundColor: ["#DF3F3F", "#FAEC30", "#5F5FFF"], // Example colors
+            data: data,
+          },
+        ],
+      };
+
+      console.log(chartData.datasets)
+
+      this.chartData = chartData;
+  },
     getDashboardData() {
       var token = localStorage.getItem("token");
       axios({
@@ -111,17 +128,15 @@ export default {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        data: {
-        },
+        data: {},
       })
         .then((res) => {
           this.pending.count = res.data.pending;
           this.total.count = res.data.appointment;
           this.Archives.count = res.data.archive;
-          this.chartData.datasets[0].data[0] = this.pending.count;
-          this.chartData.datasets[0].data[1] = this.total.count
-          console.log(this.chartData.datasets[0].data[1]);
+          const data = [res.data.pending, res.data.appointment , res.data.archive];
 
+        this.setChartData(data);
         })
         .catch((error) => {
           console.error("Error occurred:", error);
