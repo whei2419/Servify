@@ -15,23 +15,35 @@ class Document extends Model
         'name',
     ];
 
-    protected $hidden = ['documentInputs'];
+    protected $hidden = ['requirements','documentInputs'];
 
-    protected $appends = ['input'];
+    protected $appends = ['requirement','input'];
+
+    public function getRequirementAttribute()
+    {
+        return $this->requirements;
+    }
 
     public function getInputAttribute()
     {
         return $this->documentInputs;
     }
+
+   
     
     public function documentInputs()
     {
         return $this->hasMany(DocumentInput::class);
     }
 
-    public function appointment()
+    public function requirement()
     {
         return $this->hasMany(Appointment::class);
+    }
+
+    public function requirements()
+    {
+        return $this->hasMany(Requirement::class);
     }
 
 
