@@ -36,9 +36,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/process', [AppointmentController::class, 'process']);
         Route::post('/appointmentList', [AppointmentController::class, 'appointmentList']);
         Route::post('/editAppointment', [AppointmentController::class, 'editAppointment']);
+        Route::post('/deleteAppointment', [AppointmentController::class, 'deleteAppointment']);
         Route::post('/download', [AppointmentController::class, 'download']);
         Route::post('/dashboard', [AppointmentController::class, 'dashboard']);
-
     });
 
 });
