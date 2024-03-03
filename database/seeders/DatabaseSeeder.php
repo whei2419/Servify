@@ -17,5 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(InputSeeder::class);
         $this->call(DocumentInputSeeder::class);
         $this->call(StatusSeeder::class);
+        $this->call(RequirementSeeder::class);
+
     }
 }
