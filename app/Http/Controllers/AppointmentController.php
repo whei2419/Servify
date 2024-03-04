@@ -170,6 +170,12 @@ class AppointmentController extends Controller
 
     public function process(Request $request)
     {
+        $current = Appointment::where('status_id',3)->first();
+        if(!empty($current)){
+            $current->status_id = 4;
+            $current->save();
+        }
+        
         $queue = Queue::join('appointments', 'queues.appointment_id', '=', 'appointments.id')
             ->where('appointments.status_id',2)->orderBy('queues.id','asc')->first();
       
@@ -180,11 +186,7 @@ class AppointmentController extends Controller
             ]);
         }
 
-        $current = Appointment::where('status_id',3)->first();
-        if(!empty($current)){
-            $current->status_id = 4;
-            $current->save();
-        }
+        
 
         $appointment = Appointment::find($queue->appointment_id);
         $appointment->status_id = 3;
