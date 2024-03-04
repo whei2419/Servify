@@ -1,53 +1,33 @@
 <template>
-    <v-container class="w-100 main-container">
-        <Navbar></Navbar>
+
       <v-card
-        class="mx-auto pa-9 mt-16 overflow-y-auto congratulation-card"
+        class="mx-auto pa-9 mt-4 overflow-y-auto congratulation-card"
         elevation="2"
         max-width="800"
       >
 
+
         <h1 class="text-h4 text-md-h5 text-lg-h4 text-center text-bold mb-2">
           Appointment Created!
         </h1>
-        <p class="mb-6 text-center">
-          Weve sent you an email of your qr please present it to our counter at
-          your scheduled date
-        </p>
-        <v-row class="contents">
-            <v-col>
-                <div class="qr-cntainer mb-2">
+
+        <div class="qr-cntainer mb-2">
           <qrcode-vue :value="details.code" :size="qrData.size" level="H" />
         </div>
-        <p class="text-center">{{ details.code }}</p>
-
-            </v-col>
-            <v-col>
-                <h4 class="mb-2">Schedule:</h4>
-                <p class="schedule">
+        <p>{{ details.code }}</p>
+        <p class="schedule">
           <i class="fa-regular fa-calendar-days"></i> Date :
           <span>{{ formattedDate(details.date) }}</span>
         </p>
         <p class="schedule">
           <i class="fa-regular fa-clock"></i> Time : <span>{{ formattedTime(details.date) }}</span>
         </p>
-                <h4>Requirements:</h4>
-        <ul class="ml-4">
-            <li  v-for="item in details.document.requirement" :key="item.id">{{ item.name }}</li>
-        </ul>
-            </v-col>
-        </v-row>
-
-
-
-
 
       </v-card>
-    </v-container>
+
 </template>
 
   <script>
-  import Navbar from "../components/Navbar.vue";
   import moment from 'moment';
   import { useAppointmentStore } from "../store/AppointmentStore";
   import QrcodeVue from 'qrcode.vue'
@@ -62,7 +42,6 @@
     },
     components: {
         QrcodeVue,
-        Navbar
       },
 
     data() {
@@ -139,13 +118,13 @@
   .congratulation-card {
     .schedule {
       font-size: 1rem;
-      margin-bottom: 10px;
+      margin: 10px;
       color: #66bb6a;
 
     }
     p {
       font-size: $font-sm;
-
+      text-align: center;
     }
     .icon {
       margin-bottom: 1.5rem;
@@ -153,12 +132,6 @@
         font-size: 4rem;
       }
     }
-  }
-  .main-container {
-    background: #fff;
-  }
-  .contents {
-    align-items: center;
   }
   </style>
 

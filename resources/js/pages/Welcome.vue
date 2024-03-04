@@ -6,11 +6,9 @@
                 <v-col class="d-flex align-center justify-content-start">
                     <div class="information-container">
                         <h1 class="mt-10 mb-1">Welcome to Servify</h1>
-                        <h2 class="">Lorem ipsum dolor sit amet.</h2>
+                        <h2 class="">Barangay San Agustin.</h2>
                         <p class="mb-10">
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Aut at minus esse voluptas corporis eum
-                            delectus perferendis veritatis adipisci doloremque.
+                            Looking to obtain a certificate from our friendly barangay? Let's make the process easy and hassle-free for you! Simply schedule your appointment and breeze through the paperwork effortlessly. Your convenience is our priority, so let's get started.
                         </p>
 
                         <v-dialog width="600">

@@ -1,6 +1,12 @@
 
 <template>
   <v-container>
+    <div class="header">
+        <v-btn class="mb-3 primary-btn"  @click="goto()">
+            <i class="fa-solid fa-left-long"></i>
+                  <span class="ml-1">Back</span>
+                </v-btn>
+    </div>
     <v-card class="text-center pa-4 h-screen">
       <div v-if="error" class="error">{{ error }}</div>
       <div v-if="cameraNotDetected" class="error">Camera not detected</div>
@@ -87,6 +93,9 @@ export default {
     };
   },
   methods: {
+    goto(){
+        this.$router.push({ name: "Dashboard" });
+    },
     addQueue(value) {
       var token = localStorage.getItem("token");
       axios({

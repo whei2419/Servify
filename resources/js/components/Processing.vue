@@ -114,9 +114,9 @@
                 class="submit-button primary-btn"
                 >Submit <i class="fa-solid fa-paper-plane pl-2"></i
               ></v-btn>
-              <v-btn v-if="!isEdit && list.length != 1" class="primary-btn " @click="handleNext">
+              <v-btn v-if="!isEdit && isDownload " class="primary-btn " @click="handleNext">
                 Next
-                <i class="fa-solid fa-circle-right pl-2"></i>
+
               </v-btn>
             </div>
           </v-form>
@@ -142,6 +142,7 @@ import moment from "moment";
 export default {
   data() {
     return {
+        isDownload:false,
       list: null,
       userData: {},
       selectedValue: "",
@@ -197,6 +198,9 @@ export default {
           link.click();
           document.body.removeChild(link);
           window.URL.revokeObjectURL(url);
+
+          this.isDownload = true;
+
         })
         .catch((error) => {
           console.error("Error downloading file:", error);
@@ -217,6 +221,7 @@ export default {
       })
         .then((res) => {
             this.getList();
+            this.isDownload = false;
         })
         .catch((error) => {
           console.error("Error occurred:", error);

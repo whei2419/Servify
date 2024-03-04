@@ -16,12 +16,22 @@
       <v-row>
         <v-col>
           <div class="chart-tile">
-            <Bar id="my-chart-id" :options="chartOptions" :data="chartData" />
+            <Bar
+              id="my-chart-id"
+              v-if="!loading"
+              :options="chartOptions"
+              :data="chartData"
+            />
           </div>
         </v-col>
         <v-col>
           <div class="chart-tile">
-            <Bar id="my-chart-id" :options="chartOptions" :data="chartData2" />
+            <Bar
+              v-if="!loading"
+              id="my-chart-id"
+              :options="chartOptions"
+              :data="chartData2"
+            />
           </div>
         </v-col>
       </v-row>
@@ -59,6 +69,9 @@ export default {
   },
   data() {
     return {
+      chart: null,
+      chart2: null,
+      loading: true,
       pending: {
         title: "Pending Appointments",
         count: 0,
@@ -75,51 +88,23 @@ export default {
         icon: "fa-solid fa-box-archive",
       },
 
-      chartData2: {
-        labels: ["Pending", "Total", "Archives"],
-        datasets: [
-          {
-            label: "Certificate",
-            backgroundColor: ["#DF3F3F", "#FAEC30", "#5F5FFF"], // Example colors
-            data: [10, 10, 30],
-          },
-        ],
-      },
-      chartData: {
-        labels: ["Pending", "Total", "Archives"],
-        datasets: [
-          {
-            label: "Certificate",
-            backgroundColor: ["#DF3F3F", "#FAEC30", "#5F5FFF"], // Example colors
-            data: [10, 10, 30],
-          },
-        ],
-      },
       chartOptions: {
         responsive: true,
       },
     };
   },
+  computed: {
+    chartData() {
+      return this.chart;
+    },
+    chartData2() {
+      return this.chart2;
+    },
+  },
   created() {
     this.getDashboardData();
   },
-
   methods: {
-    setChartData(data){
-    const chartData =  {
-        labels: ["Pending", "Total", "Archives"],
-        datasets: [
-          {
-            backgroundColor: ["#DF3F3F", "#FAEC30", "#5F5FFF"], // Example colors
-            data: data,
-          },
-        ],
-      };
-
-      console.log(chartData.datasets)
-
-      this.chartData = chartData;
-  },
     getDashboardData() {
       var token = localStorage.getItem("token");
       axios({
@@ -128,19 +113,59 @@ export default {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        data: {},
       })
         .then((res) => {
           this.pending.count = res.data.pending;
           this.total.count = res.data.appointment;
           this.Archives.count = res.data.archive;
-          const data = [res.data.pending, res.data.appointment , res.data.archive];
 
-        this.setChartData(data);
+          const chartData = {
+            labels: ["Pending", "Total", "Archives"],
+            datasets: [
+              {
+                label: "Appointments",
+                backgroundColor: ["#DF3F3F", "#FAEC30", "#5F5FFF"], // Example colors
+                data: [
+                  res.data.pending,
+                  res.data.appointment,
+                  res.data.archive,
+                ],
+              },
+            ],
+          };
+
+          this.chart = chartData;
+
+          var chartData2 = {
+            labels: [],
+            datasets: [
+              {
+                label: "Certificate Released",
+                backgroundColor: [],
+                data: [],
+              },
+            ],
+          };
+
+          res.data.documents.forEach((item) => {
+            chartData2.labels.push(item.document.name);
+            chartData2.datasets[0].data.push(item.appointment_count);
+            chartData2.datasets[0].backgroundColor.push(this.getRandomColor());
+          });
+
+          this.chart2 = chartData2;
         })
         .catch((error) => {
           console.error("Error occurred:", error);
         });
+
+      setTimeout(() => {
+        this.loading = false;
+      }, 500); // 3000 milliseconds = 3 seconds
+    },
+    getRandomColor() {
+      // Generate a random color in hexadecimal format
+      return "#" + Math.floor(Math.random() * 16777215).toString(16);
     },
   },
 };

@@ -10,7 +10,7 @@
         ></v-img>
       <div class="mx-auto pa-6 mt-6 login-container" >
         <h2 class="text-start">Sign in</h2>
-        <p class="form-text" >Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe, veritatis?</p>
+        <p class="form-text" >Sign in to access your account</p>
         <p v-if="message" class="error-message text-center mb-1">{{ message }}</p>
         <v-form class="form form-border" @submit.prevent="handleSubmit">
         <p class="small-label">Email</p>
@@ -28,7 +28,6 @@
             label="Password"
             type="password"
           ></v-text-field>
-          <p class="forgot-password">Forgot Password?</p>
           <v-btn
             type="submit"
             variant="flat"
