@@ -10,7 +10,7 @@
         src="images/documents.jpg"
       ></v-img>
       <p class="text-center mb-4">
-        Dont know what requirements needed for your certificate?
+        Dont know what requirements needed for your certificate? Search below to show the list of requirements.
       </p>
       <v-select
         v-model="documentType"
@@ -80,13 +80,5 @@ export default {
 }
 .text-bold {
   font-weight: 600;
-}
-</style>
-<style lang="scss">
-.document-type {
-    label {
-        display: block !important;
-    }
-
 }
 </style>
