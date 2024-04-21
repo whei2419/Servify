@@ -143,10 +143,7 @@ export default {
   },
   methods: {
     getSelectedValue(event) {
-      this.selectedValue =  {
-        id: event.target.value,
-        name: event.target.dataset.name
-      }
+      this.selectedValue = event.target.value;
     },
     handleSubmit(values) {
       this.loading = true;
@@ -156,13 +153,6 @@ export default {
       const processData = [];
       const inputs = values.target;
 
-      processData.push({
-        id: this.selectedValue.id,
-        value: this.selectedValue.id,
-        type: "radio",
-        name: this.selectedValue.name,
-      });
-
       for (const item of inputs) {
         if (item.type != "radio" && item.type != "submit") {
           processData.push({
@@ -170,6 +160,14 @@ export default {
             value: item.value,
             type: item.type,
             name: item.name,
+          });
+        }else if(item.type == "radio"){
+          processData.push({
+            id: item.value,
+            value: item.value,
+            type: item.type,
+            name: item.dataset.name,
+            selected: this.selectedValue == item.value ? true : false,
           });
         }
       }

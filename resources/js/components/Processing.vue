@@ -98,11 +98,13 @@
                   type="radio"
                   :name="input.type"
                   :value="input.id"
-                  v-model="selectedValue"
+                  :data-name="input.name"
+                    :checked="input.selected"
                   :disabled="!isEdit"
+                  @change="getSelectedValue"
                   required
                 />
-                <label class="ml-2">{{ input.input.name }}</label>
+                <label class="ml-2">{{ input.name }}</label>
               </div>
             </div>
             <div class="buttonContainer">
@@ -164,6 +166,8 @@ export default {
         }
         groupedItems[type].push(item);
       }
+
+      console.log(groupedItems);
       return groupedItems;
     },
     fomatDate() {
@@ -173,6 +177,9 @@ export default {
     },
   },
   methods: {
+    getSelectedValue(event) {
+      this.selectedValue = event.target.value;
+    },
     download() {
       var token = localStorage.getItem("token");
       axios({
@@ -240,6 +247,14 @@ export default {
             value: item.value,
             type: item.type,
             name: item.name,
+          });
+        }else if(item.type == "radio"){
+          processData.push({
+            id: item.value,
+            value: item.value,
+            type: item.type,
+            name: item.dataset.name,
+            selected: this.selectedValue == item.value ? true : false,
           });
         }
       }
