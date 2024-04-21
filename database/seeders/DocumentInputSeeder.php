@@ -16,6 +16,7 @@ class DocumentInputSeeder extends Seeder
         DocumentInput::create(['document_id'=>1,'input_id'=>1]);
         DocumentInput::create(['document_id'=>1,'input_id'=>2]);
         DocumentInput::create(['document_id'=>1,'input_id'=>3]);
+        DocumentInput::create(['document_id'=>1,'input_id'=>7]);
         DocumentInput::create(['document_id'=>1,'input_id'=>8]);
 
 
@@ -27,9 +28,11 @@ class DocumentInputSeeder extends Seeder
 
         DocumentInput::create(['document_id'=>3,'input_id'=>1]);
         DocumentInput::create(['document_id'=>3,'input_id'=>2]);
+        DocumentInput::create(['document_id'=>3,'input_id'=>7]);
         DocumentInput::create(['document_id'=>3,'input_id'=>8]);
 
         DocumentInput::create(['document_id'=>4,'input_id'=>1]);
+        DocumentInput::create(['document_id'=>4,'input_id'=>7]);
         DocumentInput::create(['document_id'=>4,'input_id'=>8]);
 
         DocumentInput::create(['document_id'=>5,'input_id'=>1]);

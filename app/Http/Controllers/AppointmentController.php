@@ -216,7 +216,7 @@ class AppointmentController extends Controller
         $values = json_decode($appointment->values);
         if($appointment->document_id == 1)
         {
-            $data = $this->generateBrgyClearance($values[0]->value,$values[2]->value,$values[1]->value,$appointment->date);
+            $data = $this->generateBrgyClearance($values[0]->value,$values[3]->value,$values[2]->value,$appointment->date,$values[1]->value);
             return $data;
         }else if($appointment->document_id == 2)
         {
@@ -224,11 +224,11 @@ class AppointmentController extends Controller
             return $data;
         }else if($appointment->document_id == 3)
         {
-            $data = $this->generateIndigency($values[0]->value,$values[2]->value,$values[1]->value,$appointment->date);
+            $data = $this->generateIndigency($values[0]->value,$values[3]->value,$values[2]->value,$appointment->date,$values[1]->value);
             return $data;
         } else if($appointment->document_id == 4)
         {
-            $data = $this->generateResidency($values[0]->value,$values[1]->value,$appointment->date);
+            $data = $this->generateResidency($values[0]->value,$values[2]->value,$appointment->date,$values[1]->value);
             return $data;
         }
         else if($appointment->document_id == 5)
@@ -290,7 +290,7 @@ class AppointmentController extends Controller
         ]);
     }
 
-    public function generateBrgyClearance($name, $age, $purpose,$date)
+    public function generateBrgyClearance($name, $age, $purpose,$date,$location)
     {
             // Load the Word template file
             $templateFile = public_path('templates/BRGY-CLEARANCE-2019.docx');
@@ -299,6 +299,8 @@ class AppointmentController extends Controller
             // Replace placeholders with dynamic data
             $templateProcessor->setValue('name', $name);
             $templateProcessor->setValue('age', $age);
+            $templateProcessor->setValue('location', $location);
+
             $templateProcessor->setValue('purpose', $purpose);
             $templateProcessor->setValue('date', $date);
 
@@ -311,15 +313,17 @@ class AppointmentController extends Controller
             return response()->download($outputFile)->deleteFileAfterSend(true);
     }
 
-    public function generateIndigency($name, $age, $purpose,$dates)
+    public function generateIndigency($name, $age, $purpose,$dates,$location)
     {
             // Load the Word template file
-            $templateFile = public_path('templates/indigency-2022-NEW.docx');
+            $templateFile = public_path('templates/CERTOFINDIGENCY.docx');
             $templateProcessor = new TemplateProcessor($templateFile);
 
             // Replace placeholders with dynamic data
             $templateProcessor->setValue('name', $name);
             $templateProcessor->setValue('age', $age);
+            $templateProcessor->setValue('location', $location);
+
             $templateProcessor->setValue('purpose', $purpose);
             $date = new DateTime($dates);
             // Extract day and month
@@ -338,14 +342,16 @@ class AppointmentController extends Controller
             return response()->download($outputFile)->deleteFileAfterSend(true);
     }
 
-    public function generateResidency($name, $purpose,$dates)
+    public function generateResidency($name, $purpose,$dates,$location)
     {
             // Load the Word template file
-            $templateFile = public_path('templates/RESIDENCY-2023.docx');
+            $templateFile = public_path('templates/CERTOFRESIDENCY.docx');
             $templateProcessor = new TemplateProcessor($templateFile);
 
             // Replace placeholders with dynamic data
             $templateProcessor->setValue('name', $name);
+            $templateProcessor->setValue('location', $location);
+
             $templateProcessor->setValue('purpose', $purpose);
             $date = new DateTime($dates);
             // Extract day and month
@@ -367,7 +373,7 @@ class AppointmentController extends Controller
     public function generateTricycle($name, $location,$color,$motor,$plate,$body,$chasis,$dates)
     {
             // Load the Word template file
-            $templateFile = public_path('templates/TRICYCLE-2019.docx');
+            $templateFile = public_path('templates/TRICYCLEPERMIT.docx');
             $templateProcessor = new TemplateProcessor($templateFile);
 
             // Replace placeholders with dynamic data
@@ -400,7 +406,7 @@ class AppointmentController extends Controller
     public function generateBusinessClearance($name, $trade, $type,$location,$dates)
     {
             // Load the Word template file
-            $templateFile = public_path('templates/BUSS2020.docx');
+            $templateFile = public_path('templates/BUSSCLEARANCE.docx');
             $templateProcessor = new TemplateProcessor($templateFile);
 
             // Replace placeholders with dynamic data
