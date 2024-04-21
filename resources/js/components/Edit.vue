@@ -80,11 +80,14 @@
                     class="input-radio"
                     type="radio"
                     :name="input.type"
-                    :value="input.id"
+                    :data-name="input.name"
+                    :value="input.value"
+                    :checked="input.selected"
                     v-model="selectedValue"
+                    @change="getSelectedValue"
                     required
                   />
-                  <label class="ml-2">{{ input.input.name }}</label>
+                  <label class="ml-2">{{ input.name }}</label>
                 </div>
               </div>
               <div class="buttonContainer">
@@ -145,8 +148,9 @@
       },
     },
     methods: {
-
-
+        getSelectedValue(event) {
+            this.selectedValue = event.target.value;
+        },
       handleNext() {
         var token = localStorage.getItem("token");
         axios({
@@ -180,9 +184,16 @@
               type: item.type,
               name: item.name,
             });
+          } else if (item.type == "radio") {
+            processData.push({
+              id: item.value,
+              value: item.value,
+              type: item.type,
+              name: item.dataset.name,
+              selected: this.selectedValue == item.value ? true : false,
+            });
           }
         }
-
         axios({
           method: "post",
           url: `${config.baseUrl}/appointment/editAppointment`,
