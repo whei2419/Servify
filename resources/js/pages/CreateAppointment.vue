@@ -88,7 +88,7 @@
               type="radio"
               :name="input.input.type"
               :value="input.input.id"
-              v-model="selectedValue"
+              @change="getSelectedValue"
               required
             />
             <label class="ml-2">{{ input.input.name }}</label>
@@ -141,6 +141,9 @@ export default {
     },
   },
   methods: {
+    getSelectedValue(event) {
+      this.selectedValue = event.target.value;
+    },
     handleSubmit(values) {
       this.loading = true;
       const userDetails = useAppointmentStore().appointmentData;
@@ -148,6 +151,15 @@ export default {
       const date = `${userDetails.appointmentDate} ${userDetails.appointmentTime}`;
       const processData = [];
       const inputs = values.target;
+
+      console.log(values.target)
+
+      processData.push({
+        id: this.selectedValue,
+        value: this.selectedValue,
+        type: "radio",
+        name: "radio",
+      });
 
       for (const item of inputs) {
         if (item.type != "radio" && item.type != "submit") {
@@ -182,6 +194,8 @@ export default {
   },
   created() {
     const formInputs = useAppointmentStore().formatInputs;
+
+    console.log(formInputs)
   },
 };
 </script>
