@@ -1,8 +1,8 @@
 <template>
-  <v-container class="w-100 main-container mt-11">
+  <v-container class="w-100 main-container mt-sm-5 mt-md-11">
     <Navbar></Navbar>
     <v-card
-      class="mx-auto pa-9 mt-16 overflow-y-auto form"
+      class="mx-auto pa-md-9 pa-sm-4 pa-5 mt-16 overflow-y-auto form card-class"
       elevation="2"
       max-width="800"
     >
@@ -255,6 +255,16 @@ export default {
             font-weight: 500;
         }
     }
+}
+.primary-btn {
+    //on small screens font size is 14px
+    @media (max-width: 600px) {
+        font-size: 14px;
+    }
+}
+.card-class {
+    max-height: 100%;
+    overflow: auto;
 }
 </style>
 

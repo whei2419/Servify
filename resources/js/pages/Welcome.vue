@@ -2,8 +2,8 @@
     <v-container class="w-100 h-screen main-container">
         <Navbar></Navbar>
         <div class="container first-container">
-            <v-row>
-                <v-col class="d-flex align-center justify-content-start">
+            <v-row reverse>
+                <v-col cols="12" sm="12" md="6"  class="d-flex align-center justify-content-start">
                     <div class="information-container">
                         <h1 class="mt-10 mb-1">Welcome to Servify</h1>
                         <h2 class="">Barangay San Agustin.</h2>
@@ -11,7 +11,7 @@
                             Looking to obtain a certificate from our friendly barangay? Let's make the process easy and hassle-free for you! Simply schedule your appointment and breeze through the paperwork effortlessly. Your convenience is our priority, so let's get started.
                         </p>
 
-                        <v-dialog width="600">
+                        <v-dialog class="date-appointment">
                             <template v-slot:activator="{ props }">
                                 <button class="schedule-btn" v-bind="props">
                                     Get an appointment
@@ -103,7 +103,7 @@
                         </v-dialog>
                     </div>
                 </v-col>
-                <v-col class="d-flex align-center justify-end">
+                <v-col cols="12" sm="12" md="6" class="d-flex align-center justify-sm-center justify-md-end">
                     <v-img
                         max-width="500"
                         aspect-ratio="16/9"
@@ -136,6 +136,7 @@ export default {
         return {
             show: false,
             loading: false,
+            completed: false,
             date: null,
             time: null,
             documentsList: [],
@@ -154,12 +155,16 @@ export default {
         validateTime() {
             const selectedTime = new Date(`2000-01-01T${this.time}`);
             const startTime = new Date(`2000-01-01T08:00`);
-            const endTime = new Date(`2000-01-01T17:00`);
+            const endTime = new Date(`2000-01-01T16:00`);
+            const breakTime = new Date(`2000-01-01T12:00`);
 
-            if (selectedTime < startTime || selectedTime > endTime) {
+            if (selectedTime < startTime || selectedTime > endTime || breakTime === selectedTime) {
                 this.errorMessage =
-                    "Please add a time between 8:00am to 5:00pm";
-                this.time = "08:00";
+                    "Please add a time between 8:00am to 11:00am and 1:00pm 4:00pm";
+                this.completed = false;
+            }else {
+                this.errorMessage = null;
+                this.completed = true;
             }
         },
         itemProps(item) {
@@ -173,6 +178,12 @@ export default {
                     "Please complete all fields to check available date and time";
                 return;
             }
+
+            if (!this.completed) {
+                this.errorMessage =
+                    "Please add a time between 8:00am to 11:00am and 1:00pm 4:00pm";
+                return;
+            }
             const time = moment(this.time, "HH:mm")
                 .add(0, "seconds")
                 .format("HH:mm:ss");
@@ -184,8 +195,6 @@ export default {
                 appointmentInputList: this.documentType.input,
                 documentId: this.documentType.id,
             };
-
-            console.log(this.documentType.input);
 
             this.loading = true;
             const dateTime = `${this.date} ${time}`;
@@ -245,6 +254,11 @@ export default {
     box-sizing: border-box;
     width: 100%;
 
+    //on small screen flex direction column
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
+
     .form-control {
         width: 100%;
     }
@@ -264,6 +278,11 @@ export default {
             margin-bottom: 2px;
             font-size: 28px;
 
+            // on small screen font size is 20px
+            @media (max-width: 768px) {
+                font-size: 20px;
+            }
+
         }
         p {
             font-size: 14px;
@@ -278,20 +297,38 @@ export default {
     border-radius: 4px;
     color: #fff;
     font-weight: 600;
-    min-width: 350px;
     height: 50px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 .information-container {
+    // on small screen text align center
+    @media (max-width: 768px) {
+        text-align: center;
+    }
     h1 {
         font-size: 45px;
         color: #ff9f2f;
+
+        //if small screen font size is 20px
+        @media (max-width: 768px) {
+            font-size: 30px;
+            line-height: 1.1;
+        }
     }
 }
 .main-modal {
     background: #fff;
     padding:20px 30px 30px;
     border-radius: 10px;
+
+    //onsmall screen padding 20px
+    @media (max-width: 768px) {
+        padding: 20px;
+        .main-form {
+            padding: 0 !important;
+            border: none !important;
+        }
+    }
 }
 .close-btn {
     position: absolute;
@@ -308,5 +345,26 @@ export default {
 .main-container {
     background: #fff ;
 }
+
+.date-appointment {
+    max-width: 600px;
+
+    //on mobile screen width 100%
+    @media (max-width: 768px) {
+        width: 100%;
+        .v-overlay__content {
+            width: 100% !important;
+            margin: 0 !important;
+            max-width: unset !important;
+        }
+    }
+}
+.primary-btn {
+    //on small screen font size 14px
+    @media (max-width: 768px) {
+        font-size: 14px;
+    }
+}
+
 
 </style>

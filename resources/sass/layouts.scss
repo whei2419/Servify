@@ -4,6 +4,24 @@ body {
     overflow: auto;
 }
 
+.main-body {
+    overflow: auto;
+}
+
+html, body {
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+    overflow-y: auto; /* Add vertical scrollbar if necessary */
+  }
+
+html {
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll;
+  }
+  html::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+
 .custom-input {
     padding: 5px 20px;
     border-bottom: 1px solid rgb(133, 133, 133);
@@ -54,6 +72,19 @@ body {
     border-radius: 8px;
     border: 1px solid #FFEAD2;
     box-shadow: rgba(255, 251, 195, 0.2) 0px 8px 24px;
+
+    @media (max-width: 768px) {
+      padding: 0px;
+      border: none;
+
+      .section {
+        grid-template-columns: repeat(1, 1fr) !important;
+
+        .primary-btn {
+            font-size: 14px !important;
+        }
+      }
+    }
   }
 
 .error-message {
@@ -92,4 +123,13 @@ body {
     height: 100%;
     padding: 30px;
     box-sizing: border-box;
+}
+.information-container {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.v-container {
+    overflow: auto !important;
+
 }

@@ -32,7 +32,7 @@
           <i class="fa-regular fa-clock"></i> Time : <span>{{ formattedTime(details.date) }}</span>
         </p>
                 <h4>Requirements:</h4>
-        <ul class="ml-4">
+        <ul v-if="details.document.requirement" class="ml-4">
             <li  v-for="item in details.document.requirement" :key="item.id">{{ item.name }}</li>
         </ul>
             </v-col>
