@@ -237,6 +237,12 @@ class AppointmentController extends Controller
             return $data;
         }
 
+        else if($appointment->document_id == 6)
+        {
+            $data = $this->generateWiring($values[0]->name,$values[1]->value,$values[2]->value,$appointment->date);
+            return $data;
+        }
+
        
     }
 
@@ -434,6 +440,71 @@ class AppointmentController extends Controller
             // Get the URL for the stored file
             return response()->download($outputFile)->deleteFileAfterSend(true);
     }
+
+    public function generateWiring($radio,$name,$location,$dates)
+    {
+            // Load the Word template file
+            $templateFile = public_path('templates/WIRING.docx');
+            $templateProcessor = new TemplateProcessor($templateFile);
+
+            // Replace placeholders with dynamic data
+            $templateProcessor->setValue('radio', $radio);
+            $templateProcessor->setValue('name', $name);
+            $templateProcessor->setValue('location', $location);
+
+            switch ($radio) {
+                case 'Residential':
+                    $templateProcessor->setValue('residential_check', '✔     ');
+                    // Add a checkmark or any indicator you prefer
+                    $templateProcessor->setValue('comercial_check', '_________');
+                    $templateProcessor->setValue('institutional_check', '_________');
+                    $templateProcessor->setValue('government_check', '_________');
+                    break;
+                case 'Commercial':
+                    $templateProcessor->setValue('comercial_check', '✔');
+                    // Update other placeholders accordingly
+                    $templateProcessor->setValue('residential_check', '_________');
+                    $templateProcessor->setValue('institutional_check', '_________');
+                    $templateProcessor->setValue('government_check', '_________');
+                    break;
+                case 'Institutional':
+                    $templateProcessor->setValue('institutional_check', '✔');
+                    // Update other placeholders accordingly
+                    $templateProcessor->setValue('residential_check', '_________');
+                    $templateProcessor->setValue('comercial_check', '_________');
+                    $templateProcessor->setValue('government_check', '_________');
+                    break;
+                case 'Government':
+                    $templateProcessor->setValue('government_check', '✔');
+                    // Update other placeholders accordingly
+                    $templateProcessor->setValue('residential_check', '_________');
+                    $templateProcessor->setValue('comercial_check', '_________');
+                    $templateProcessor->setValue('institutional_check', '_________');
+                    break;
+                default:
+                    // Handle default case if needed
+                    break;
+            }
+
+            $date = new DateTime($dates);
+        // Extract day and month
+            $day = $date->format('d'); // Format 'd' returns day with leading zeros (01-31)
+            $month = $date->format('F');
+
+            $templateProcessor->setValue('day', $day);
+            $templateProcessor->setValue('month', $month);
+
+
+            // Save the modified document
+            $name = str_replace(' ', '', $radio);
+            $outputFile = storage_path('app/public/generated/buss2020'.$name.'.docx');
+            $templateProcessor->saveAs($outputFile);
+
+            // return $day;
+
+            // Get the URL for the stored file
+            return response()->download($outputFile)->deleteFileAfterSend(true);
+    }
     
 
     public function generateClearance(Request $request)
@@ -443,4 +514,6 @@ class AppointmentController extends Controller
 
         return $this->generateClearanceDocument($name, $age);
     }
+
+
 }
