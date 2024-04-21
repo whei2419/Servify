@@ -88,6 +88,7 @@
               type="radio"
               :name="input.input.type"
               :value="input.input.id"
+                :data-name="input.input.name"
               @change="getSelectedValue"
               required
             />
@@ -142,7 +143,10 @@ export default {
   },
   methods: {
     getSelectedValue(event) {
-      this.selectedValue = event.target.value;
+      this.selectedValue =  {
+        id: event.target.value,
+        name: event.target.dataset.name
+      }
     },
     handleSubmit(values) {
       this.loading = true;
@@ -152,13 +156,11 @@ export default {
       const processData = [];
       const inputs = values.target;
 
-      console.log(values.target)
-
       processData.push({
-        id: this.selectedValue,
-        value: this.selectedValue,
+        id: this.selectedValue.id,
+        value: this.selectedValue.id,
         type: "radio",
-        name: "radio",
+        name: this.selectedValue.name,
       });
 
       for (const item of inputs) {
